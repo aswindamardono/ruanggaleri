@@ -257,7 +257,7 @@
             </div>
             
             <div class="login-subtitle">
-                Sistem Manajemen Absensi & Gaji Karyawan anu
+                Sistem Manajemen Absensi & Gaji Karyawan
             </div>
 
             <div class="card login-card">

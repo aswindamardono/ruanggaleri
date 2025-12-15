@@ -257,7 +257,7 @@
             </div>
             
             <div class="login-subtitle">
-                Sistem Manajemen Absensi & Gaji Karyawan
+                Sistem Manajemen Absensi & Gaji Karyawan lokal
             </div>
 
             <div class="card login-card">

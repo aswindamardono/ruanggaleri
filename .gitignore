@@ -134,3 +134,7 @@ nb-configuration.xml
 /phpunit*.xml
 /.phpunit.*.cache
 
+index.php
+index.php
+app/Config/Database.php
+app/Config/Database.php

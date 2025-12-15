@@ -45,6 +45,15 @@ $RECYCLE.BIN/
 .vagrant
 Vagrantfile
 
+
+# --- ATURAN TAMBAHAN UNTUK PROJECT INI ---
+# File konfigurasi database lokal
+app/Config/Database.php 
+
+# Entry point file utama (Jika Anda tidak ingin ini diubah oleh tim lain)
+index.php 
+#-------------------------
+
 #-------------------------
 # Temporary Files
 #-------------------------

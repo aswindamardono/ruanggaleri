@@ -86,32 +86,48 @@
                         <th>Jabatan</th>
                         <th>Total Absensi</th>
                         <th>Gaji Pokok</th>
-                        <th>Tunjangan</th>
-                        <th>Lain - lain</th>
+                        <th>Lembur</th>
+                        <th>Terlambat</th>
+                        <th>Potongan</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $no = 1;?>
                     <?php $gaji = 0;?>
+                    <?php $total_lembur = 0;?>
+                    <?php $total_terlambat = 0;?>
+                    <?php $total_potongan = 0;?>
                     <?php foreach ($penggajian as $row):?>
                     <tr>
                         <td width="3%" align="center"><?= $no++;?></td>
                         <td width="15%"><?= $row['name'];?></td>
                         <td><?= $row['name_jabatan'];?></td>
-                        <td><?= $row['total_absensi'];?> (<?= $row['total_jam'];?> Jam)</td>
-                        <td><?= rupiah($row['gaji_pokok']);?></td>
-                        <td><?= rupiah($row['tunjangan']);?></td>
-                        <td><?= rupiah($row['lain_lain']);?></td>
-                        <td><?= rupiah($row['total']);?></td>
+                        <td align="center"><?= $row['total_absensi'];?></td>
+                        <td align="right"><?= rupiah($row['gaji_pokok']);?></td>
+                        <td align="right"><?= rupiah(isset($row['lembur']) && $row['total_jam'] > 0 ? $row['lembur'] * ($row['gaji_pokok'] / $row['total_jam']) * 1.5 : 0);?></td>
+                        <td align="center"><?= isset($row['terlambat']) ? $row['terlambat'] : 0;?> Menit</td>
+                        <td align="right"><?= rupiah(isset($row['potongan']) ? $row['potongan'] : 0);?></td>
+                        <td align="right"><?= rupiah($row['total']);?></td>
                     </tr>
-                    <?php $gaji+=$row['total'];?>
+                    <?php 
+                        $gaji += $row['total'];
+                        if(isset($row['lembur']) && $row['total_jam'] > 0) {
+                            $total_lembur += $row['lembur'] * ($row['gaji_pokok'] / $row['total_jam']) * 1.5;
+                        }
+                        if(isset($row['terlambat'])) {
+                            $total_terlambat += $row['terlambat'];
+                        }
+                        if(isset($row['potongan'])) {
+                            $total_potongan += $row['potongan'];
+                        }
+                    ?>
                     <?php endforeach;?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="7">Total Penggajian</th>
-                        <td><b><?= rupiah($gaji);?></b></td>
+                        <th colspan="8">Total Penggajian</th>
+                        <td align="right"><b><?= rupiah($gaji);?></b></td>
                     </tr>
                 </tfoot>
             </table>

@@ -70,6 +70,7 @@
         width: 100px;
         height: 100px;
         object-fit: contain;
+        background: white;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         border-radius: 20px;
         transition: transform 0.3s ease;

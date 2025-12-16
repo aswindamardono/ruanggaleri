@@ -129,7 +129,7 @@ class Lokasi extends BaseController
         $jam_mengajar = '6';
         $status = '1';
         $data = [];
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 7; $i++) {
             $data[] = [
                 'user_id' => $user_id,
                 'hari' => $hari[$i],
@@ -143,13 +143,6 @@ class Lokasi extends BaseController
         $this->JadwalModel->insertBatch($data);
 
         session()->setFlashdata('pesan', 'Data Lokasi berhasil ditambahkan.');
-        return redirect()->to(base_url('/operator/lokasi'));
-    }
-
-    public function delete($id)
-    {
-        $this->JabatanModel->delete($id);
-        session()->setFlashdata('pesan', 'Data Lokasi berhasil dihapus.');
         return redirect()->to(base_url('/operator/lokasi'));
     }
 
@@ -278,6 +271,20 @@ class Lokasi extends BaseController
         //$this->JadwalModel->where('lokasi_id', $id)->updateBatch($data2, 'hari');
 
         session()->setFlashdata('pesan', 'Data Lokasi berhasil diubah.');
+        return redirect()->to(base_url('/operator/lokasi'));
+    }
+
+    public function delete($id)
+    {
+        $lokasi = $this->LokasiModel->find($id);
+        if ($lokasi) {
+            $user_id = $lokasi['user_id'];
+            $this->JadwalModel->where('user_id', $user_id)->delete();
+            $this->LokasiModel->delete($id);
+            session()->setFlashdata('pesan', 'Data Lokasi berhasil dihapus.');
+        } else {
+            session()->setFlashdata('pesan_error', 'Data Lokasi tidak ditemukan.');
+        }
         return redirect()->to(base_url('/operator/lokasi'));
     }
 }

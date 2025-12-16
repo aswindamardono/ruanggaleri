@@ -95,19 +95,24 @@
                     <td><?= rupiah($row['gaji_pokok']);?></td>
                 </tr>
                 <tr>
-                    <td width="150px">Tunjangan</td>
+                    <td width="150px">Bonus Lembur</td>
                     <td>:</td>
-                    <td><?= rupiah($row['tunjangan']);?></td>
+                    <td><?= rupiah(isset($row['lembur']) && $row['total_jam'] > 0 ? $row['lembur'] * ($row['gaji_pokok'] / $row['total_jam']) * 1.5 : 0);?></td>
                 </tr>
                 <tr>
-                    <td width="150px">Lain - lain</td>
+                    <td width="150px">Terlambat</td>
                     <td>:</td>
-                    <td><?= rupiah($row['lain_lain']);?></td>
+                    <td><?= isset($row['terlambat']) ? $row['terlambat'] : 0;?> Menit</td>
                 </tr>
                 <tr>
-                    <td width="150px">Total</td>
+                    <td width="150px">Potongan Gaji</td>
                     <td>:</td>
-                    <td><?= rupiah($row['total']);?></td>
+                    <td><?= rupiah(isset($row['potongan']) ? $row['potongan'] : 0);?></td>
+                </tr>
+                <tr>
+                    <td width="150px"><b>Total Gaji</b></td>
+                    <td><b>:</b></td>
+                    <td><b><?= rupiah($row['total']);?></b></td>
                 </tr>
             </table>
             <br>

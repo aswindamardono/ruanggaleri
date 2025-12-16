@@ -195,7 +195,7 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="gaji_pokok" class="form-label">Gaji Pokok (Gaji Perjam x Total Jam)</label>
+                            <label for="gaji_pokok" class="form-label">Gaji Pokok (Gaji Harian x Total Hari)</label>
                             <input type="number"
                                 class="form-control <?= !empty($rusak['gaji_pokok']) ? 'is-invalid' : ''; ?>"
                                 id="gaji_pokok" name="gaji_pokok" autofocus value="<?= old('gaji_pokok'); ?>">
@@ -280,7 +280,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gaji_pokok1" class="form-label">Gaji Pokok (Gaji Perjam x Total Jam)</label>
+                            <label for="gaji_pokok1" class="form-label">Gaji Pokok (Gaji harian x Total Hari)</label>
                             <input type="number"
                                 class="form-control <?= !empty($rusak['gaji_pokok1']) ? 'is-invalid' : ''; ?>"
                                 id="gaji_pokok1<?= $row["id"];?>" name="gaji_pokok1" autofocus

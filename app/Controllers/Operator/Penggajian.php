@@ -339,6 +339,34 @@ class Penggajian extends BaseController
         exit();
     }
 
+    public function lembur($bulan, $tahun)
+    {
+        $filename = 'Laporan Lembur '.tanggalindo(date($tahun.'-'.$bulan.'-'));
+        $data['setting'] = $this->PengaturanModel->find(1);
+        $data['bulan'] = $bulan;
+        $data['tahun'] = $tahun;
+        $data['penggajian'] = $this->KaryawanModel->getPenggajian($bulan, $tahun);
+        $this->Dompdf->loadHtml(view('operator/cetak/lembur', $data));
+        $this->Dompdf->setPaper('A4', 'landscape');
+        $this->Dompdf->render();
+        $this->Dompdf->stream($filename, ['Attachment' => false]);
+        exit();
+    }
+
+    public function potongan($bulan, $tahun)
+    {
+        $filename = 'Laporan Potongan '.tanggalindo(date($tahun.'-'.$bulan.'-'));
+        $data['setting'] = $this->PengaturanModel->find(1);
+        $data['bulan'] = $bulan;
+        $data['tahun'] = $tahun;
+        $data['penggajian'] = $this->KaryawanModel->getPenggajian($bulan, $tahun);
+        $this->Dompdf->loadHtml(view('operator/cetak/potongan', $data));
+        $this->Dompdf->setPaper('A4', 'landscape');
+        $this->Dompdf->render();
+        $this->Dompdf->stream($filename, ['Attachment' => false]);
+        exit();
+    }
+
     public function excel($bulan, $tahun)
     {
         $filename = 'Laporan Penggajian '. tanggalindo(date($tahun . '-' . $bulan . '-'));

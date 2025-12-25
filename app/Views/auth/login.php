@@ -306,7 +306,7 @@
             </div>
 
             <div class="simple-footer">
-                Copyright &copy; <?= date('Y');?> <?= $setting['name_aplikasi'];?>
+                Copyright &copy; <?= date('Y');?> <a href ="https://arasitc.com">ArasITC</a> All rights reserved.
             </div>
         </div>
     </div>

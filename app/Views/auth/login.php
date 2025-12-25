@@ -306,7 +306,7 @@
             </div>
 
             <div class="simple-footer">
-                Copyright &copy; <?= date('Y');?> <a href ="https://arasitc.com">ArasITC</a> All rights reserved.
+                Copyright &copy; <?= date('Y');?> <a href ="https://arasitc.com" style="color: white">ArasITC</a>.
             </div>
         </div>
     </div>

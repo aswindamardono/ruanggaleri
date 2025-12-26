@@ -19,12 +19,20 @@
     <!-- Set also "landscape" if you need -->
     <style>
     @page {
-        size: A4;
+        size: A4 portrait;
+        margin: 50;
     }
 
     * {
         line-height: 1.5;
         font-size: 12px;
+    }
+
+    section.sheet {
+        page-break-after: always;
+        page-break-inside: avoid;
+        break-after: page;
+        break-inside: avoid;
     }
 
     hr {
@@ -50,13 +58,13 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 
-<body class="A4 landscape">
+<body class="A4">
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+    <?php foreach ($penggajian as $row):?>
     <section class="sheet padding-10mm">
         <!-- Write HTML just like a web page -->
         <article>
-            <?php foreach ($penggajian as $row):?>
             <table align="center" width="100%" heigh="50vh">
                 <tr>
                     <td width="100px">
@@ -130,10 +138,9 @@
                     </td>
                 </tr>
             </table>
-            <br>
-            <?php endforeach;?>
         </article>
     </section>
+    <?php endforeach;?>
 </body>
 
 </html>

@@ -237,5 +237,4 @@
     </div>
 </div>
 
-<?php endforeach;?>
 <?= $this->endSection('content') ?>

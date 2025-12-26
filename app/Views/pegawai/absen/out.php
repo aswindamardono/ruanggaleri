@@ -180,15 +180,15 @@
                                 <div class="font-weight-bold"><?= $title; ?></div>
                                 <div>
                                     <b><?= $user['name'];?></b><br>
-                                    <b><?= $lokasi['lokasi'];?></b><br>
+                                    <b><?= isset($lokasi['lokasi']) ? $lokasi['lokasi'] : 'Lokasi tidak ditemukan'; ?></b><br>
                                     <small><?= tanggalIndo(date("Y-m-d"));?> | <span id="jam"></span>
                                     </small>
                                 </div>
-                                <?php if($jadwal != null):
+                                <?php if($jadwal != null && isset($lokasi['lokasi'])):
                                     $now = date('H:i:s');
-                                    $jam_keluar = strtotime($lokasi['jam_keluar']);
-                                    $time_absen =  date('H:i:s', strtotime('-'.$lokasi['sebelum_pulang'].'minutes', $jam_keluar));  
-                                    $time_absen2 =  date('H:i:s', strtotime('+'.$lokasi['setelah_pulang'].'minutes', $jam_keluar));  
+                                    $jam_keluar = isset($lokasi['jam_keluar']) ? strtotime($lokasi['jam_keluar']) : strtotime('17:00:00');
+                                    $time_absen = isset($lokasi['sebelum_pulang']) ? date('H:i:s', strtotime('-'.$lokasi['sebelum_pulang'].'minutes', $jam_keluar)) : date('H:i:s', strtotime('-15 minutes', $jam_keluar));
+                                    $time_absen2 = isset($lokasi['setelah_pulang']) ? date('H:i:s', strtotime('+'.$lokasi['setelah_pulang'].'minutes', $jam_keluar)) : date('H:i:s', strtotime('+15 minutes', $jam_keluar));
                                 ?>
                                 <div class="text-center">
                                     <small>Waktu Absensi pulang anda dari jam <?= $time_absen;?> -
@@ -266,9 +266,10 @@ if (navigator.geolocation) {
             L.marker([lat, lng]).addTo(map)
                 .bindPopup("📍 Lokasi Anda").openPopup();
         
-            let str = "<?= $lokasi['lokasi'];?>";
+            let str = "<?= isset($lokasi['lokasi']) ? $lokasi['lokasi'] : 'Lokasi tidak ditemukan'; ?>";
             let lokasi = str.replace(/\s/g, "");
             var kantor = lokasi;
+            <?php if(isset($lokasi['lat']) && isset($lokasi['long'])): ?>
             L.marker([<?= $lokasi['lat'];?>, <?= $lokasi['long'];?>]).addTo(map)
                 .bindPopup(kantor).openPopup();
         
@@ -278,6 +279,7 @@ if (navigator.geolocation) {
                 fillOpacity: 0.5,
                 radius: <?= $lokasi['radius'];?>
             }).addTo(map);
+            <?php endif; ?>
         },
         function(error) {
             switch(error.code) {

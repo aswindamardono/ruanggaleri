@@ -133,7 +133,7 @@
                                 <div class="font-weight-bold"><?= $title; ?></div>
                                 <div>
                                     <b><?= $user['name'];?></b><br>
-                                    <b><?= $lokasi['lokasi'];?></b><br>
+                                    <b><?= isset($lokasi['lokasi']) ? $lokasi['lokasi'] : 'Lokasi tidak ditemukan'; ?></b><br>
                                     <small><?= tanggalIndo(date("Y-m-d"));?> | <span id="jam"></span>
                                     </small>
                                 </div>

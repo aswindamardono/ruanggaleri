@@ -180,16 +180,19 @@
                                 <div class="font-weight-bold"><?= $title; ?></div>
                                 <div>
                                     <b><?= $user['name'];?></b><br>
-                                    <b><?= $lokasi['lokasi'];?></b><br>
+                                    <b><?= isset($lokasi['lokasi']) ? $lokasi['lokasi'] : 'Lokasi tidak ditemukan'; ?></b><br>
                                     <small><?= tanggalIndo(date("Y-m-d"));?> | <span id="jam"></span>
                                     </small>
                                 </div>
-                                <?php if($jadwal != null):
+                                <?php 
                                     $now = date('H:i:s');
-                                    $jam_masuk = strtotime($lokasi['jam_masuk']);
-                                    $jam_keluar = strtotime($lokasi['jam_keluar']);
-                                    $time_absen =  date('H:i:s', strtotime('-'.$lokasi['sebelum_masuk'].'minutes', $jam_masuk));
-                                    $time_pulang =  date('H:i:s', $jam_keluar);
+                                    $time_absen = null;
+                                    $time_pulang = null;
+                                    if($jadwal != null && isset($lokasi['lokasi'])):
+                                        $jam_masuk = strtotime($lokasi['jam_masuk']);
+                                        $jam_keluar = strtotime($lokasi['jam_keluar']);
+                                        $time_absen =  date('H:i:s', strtotime('-'.$lokasi['sebelum_masuk'].'minutes', $jam_masuk));
+                                        $time_pulang =  date('H:i:s', $jam_keluar);
                                     ?>
                                 <?php if($izin != null) {?>
                                 <div class="text-center">

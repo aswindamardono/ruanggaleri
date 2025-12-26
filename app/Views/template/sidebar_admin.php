@@ -47,7 +47,7 @@
             <li class="menu-header">Data Menu</li>
             <li class="<?= (uri(2) == 'jabatan') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/jabatan');?>" class="nav-link"><i
-                        class="fas fa-map-pin"></i><span>Jabatan</span></a>
+                        class="fas fa-edit"></i><span>Jabatan</span></a>
             </li>
             <li class="<?= (uri(2) == 'lokasi') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/lokasi');?>" class="nav-link"><i
@@ -61,18 +61,18 @@
                 <a href="<?= base_url('operator/jadwal');?>" class="nav-link"><i
                         class="fas fa-calendar"></i><span>Jadwal</span></a>
             </li>
-            <li class="<?= (uri(2) == 'libur') ? 'active' : '';?>">
+            <!-- <li class="<?= (uri(2) == 'libur') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/libur');?>" class="nav-link"><i
                         class="fas fa-calendar-check"></i><span>Libur</span></a>
-            </li>
+            </li> -->
             <li class="<?= (uri(2) == 'pengaturan') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/pengaturan');?>" class="nav-link"><i
                         class="fas fa-cogs"></i><span>Pengaturan</span></a>
             </li>
-            <li class="<?= (uri(2) == 'email') ? 'active' : '';?>">
+            <!-- <li class="<?= (uri(2) == 'email') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/email');?>" class="nav-link"><i
                         class="fas fa-envelope"></i><span>Email (lupa password)</span></a>
-            </li>
+            </li> -->
             <li class="menu-header">Data Profil</li>
             <li class="<?= (uri(2) == 'profil') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/profil');?>" class="nav-link"><i

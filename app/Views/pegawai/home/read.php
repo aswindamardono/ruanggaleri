@@ -162,6 +162,10 @@
     .summary-card.izin .summary-value { color: var(--primary); }
     .summary-card.sakit .summary-value { color: var(--danger); }
     .summary-card.terlambat .summary-value { color: var(--warning); }
+    .summary-card.logout { background: linear-gradient(135deg, #c1c1c1 0%, #d57c7c 100%); cursor: pointer; }
+    .summary-card.logout .summary-icon { color: white; }
+    .summary-card.logout .summary-label { color: rgba(255, 255, 255, 0.9); }
+    .summary-card.logout .summary-value { color: white; }
 
     /* Attendance History */
     .attendance-history {
@@ -507,16 +511,20 @@
             <div class="summary-label">Izin</div>
             <div class="summary-value"><?= $izin;?></div>
         </div>
-        <div class="summary-card sakit">
-            <div class="summary-icon"><i class="fas fa-heartbeat"></i></div>
-            <div class="summary-label">Sakit</div>
-            <div class="summary-value"><?= $sakit;?></div>
-        </div>
         <div class="summary-card terlambat">
             <div class="summary-icon"><i class="fas fa-clock"></i></div>
             <div class="summary-label">Terlambat</div>
             <div class="summary-value"><?= $terlambat;?></div>
         </div>
+        <form method="get" action="<?= base_url('logout');?>" style="width: 100%;">
+            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; width: 100%;">
+                <div class="summary-card logout">
+                    <div class="summary-icon"><i class="fas fa-power-off"></i></div>
+                    <div class="summary-label">LOG OUT</div>
+                    <div class="summary-value">Keluar</div>
+                </div>
+            </button>
+        </form>
     </div>
 
     <!-- Attendance History -->

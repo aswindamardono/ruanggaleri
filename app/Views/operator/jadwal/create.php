@@ -91,7 +91,7 @@
                                         <th>Hari</th>
                                         <th>Jam Masuk</th>
                                         <th>Jam Keluar</th>
-                                        <th>Jam Mengajar</th>
+                                        <th>Gaji</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

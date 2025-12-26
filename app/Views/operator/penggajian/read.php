@@ -226,7 +226,7 @@
                             <input type="number"
                                 class="form-control <?= !empty($rusak['lembur']) ? 'is-invalid' : ''; ?>"
                                 id="lembur" name="lembur" autofocus value="<?= old('lembur', 0); ?>">
-                            <small class="form-text text-muted">Bonus lembur: 350 gaji per jam</small>
+                            <small class="form-text text-muted">Bonus lembur: 350 gaji per menit</small>
                             <small class="invalid-feedback">
                                 <?= !empty($rusak['lembur']) ? validation_show_error('lembur') : ''; ?>
                             </small>
@@ -315,7 +315,7 @@
                                 class="form-control <?= !empty($rusak['lembur1']) ? 'is-invalid' : ''; ?>"
                                 id="lembur1<?= $row["id"];?>" name="lembur1" autofocus
                                 value="<?= old('lembur1', $row['lembur'] ?? 0); ?>">
-                            <small class="form-text text-muted">Bonus lembur: 350 gaji per jam</small>
+                            <small class="form-text text-muted">Bonus lembur: 350 gaji per menit</small>
                             <small class="invalid-feedback">
                                 <?= !empty($rusak['lembur1']) ? validation_show_error('lembur1') : ''; ?>
                             </small>

@@ -184,11 +184,11 @@
                                     <small><?= tanggalIndo(date("Y-m-d"));?> | <span id="jam"></span>
                                     </small>
                                 </div>
-                                <?php if($jadwal != null && isset($lokasi['lokasi'])):
+                                <?php if($jadwal != null):
                                     $now = date('H:i:s');
                                     $jam_keluar = isset($lokasi['jam_keluar']) ? strtotime($lokasi['jam_keluar']) : strtotime('17:00:00');
-                                    $time_absen = isset($lokasi['sebelum_pulang']) ? date('H:i:s', strtotime('-'.$lokasi['sebelum_pulang'].'minutes', $jam_keluar)) : date('H:i:s', strtotime('-15 minutes', $jam_keluar));
-                                    $time_absen2 = isset($lokasi['setelah_pulang']) ? date('H:i:s', strtotime('+'.$lokasi['setelah_pulang'].'minutes', $jam_keluar)) : date('H:i:s', strtotime('+15 minutes', $jam_keluar));
+                                    $time_absen = date('H:i:s', strtotime('-15 minutes', $jam_keluar));
+                                    $time_absen2 = date('H:i:s', strtotime('+15 minutes', $jam_keluar));
                                 ?>
                                 <div class="text-center">
                                     <small>Waktu Absensi pulang anda dari jam <?= $time_absen;?> -
@@ -236,11 +236,6 @@ Webcam.set({
 });
 Webcam.attach('#my_camera');
 
-// if (navigator.geolocation) {
-//     navigator.geolocation.watchPosition(showPosition);
-// } else {
-//     alert("Geolocation is not supported by this browser.");
-// }
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
         function(position) {
@@ -251,12 +246,6 @@ if (navigator.geolocation) {
 
             alert("📍 Lokasi Anda:\nLatitude: " + lat + "\nLongitude: " + lng);
 
-            // contoh menampilkan di peta:
-            // L.marker([lat, lng]).addTo(map)
-            //   .bindPopup("📍 Lokasi Anda").openPopup();
-
-            // map.setView([lat, lng], 15);
-            
             var map = L.map('map').setView([lat, lng], 15);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -267,9 +256,9 @@ if (navigator.geolocation) {
                 .bindPopup("📍 Lokasi Anda").openPopup();
         
             let str = "<?= isset($lokasi['lokasi']) ? $lokasi['lokasi'] : 'Lokasi tidak ditemukan'; ?>";
-            let lokasi = str.replace(/\s/g, "");
-            var kantor = lokasi;
-            <?php if(isset($lokasi['lat']) && isset($lokasi['long'])): ?>
+            let lokasiKantor = str.replace(/\s/g, "");
+            var kantor = lokasiKantor;
+            <?php if(isset($lokasi['lat']) && isset($lokasi['long']) && $lokasi['lat'] != 0 && $lokasi['long'] != 0): ?>
             L.marker([<?= $lokasi['lat'];?>, <?= $lokasi['long'];?>]).addTo(map)
                 .bindPopup(kantor).openPopup();
         

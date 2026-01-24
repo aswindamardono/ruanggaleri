@@ -17,7 +17,12 @@
             <li class="menu-header">Dashboard</li>
             <li class="<?= (uri(2) == 'dashboard') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/dashboard');?>" class="nav-link"><i
-                        class="fas fa-fire"></i><span>Dashboard</span></a>
+                        class="fas fa-home"></i><span>Dashboard</span></a>
+            </li>
+            <li class="menu-header">Penugasan</li>
+            <li class="<?= (uri(2) == 'workorder') ? 'active' : '';?>">
+                <a href="<?= base_url('operator/workorder');?>" class="nav-link"><i
+                        class="fas fa-fire"></i><span>Workorder</span></a>
             </li>
             <li class="menu-header">Data Monitor</li>
             <li class="<?= (uri(2) == 'monitoring') ? 'active' : '';?>">
@@ -40,6 +45,10 @@
                     </li>
                 </ul>
             </li>
+            <li class="<?= (uri(2) == 'kasbon') ? 'active' : '';?>">
+                <a href="<?= base_url('operator/kasbon');?>" class="nav-link"><i
+                        class="fas fa-money-bill-alt"></i><span>Kasbon</span></a>
+            </li>
             <li class="<?= (uri(2) == 'penggajian') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/penggajian');?>" class="nav-link"><i
                         class="fas fa-dollar-sign"></i><span>Penggajian</span></a>
@@ -48,10 +57,6 @@
             <li class="<?= (uri(2) == 'jabatan') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/jabatan');?>" class="nav-link"><i
                         class="fas fa-edit"></i><span>Jabatan</span></a>
-            </li>
-            <li class="<?= (uri(2) == 'lokasi') ? 'active' : '';?>">
-                <a href="<?= base_url('operator/lokasi');?>" class="nav-link"><i
-                        class="fas fa-map-pin"></i><span>Area Lokasi</span></a>
             </li>
             <li class="<?= (uri(2) == 'karyawan') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/karyawan');?>" class="nav-link"><i

@@ -105,7 +105,6 @@
                                 <tr>
                                     <th rowspan="2" width="5%">No</th>
                                     <th rowspan="2">Nama</th>
-                                    <th rowspan="2">Lokasi</th>
                                     <?php for ($i=1; $i <= $days; $i++): ?>
                                     <th width="8%" colspan="2" class="text-center"><?php echo $i; ?></th>
                                     <?php endfor; ?>
@@ -127,12 +126,6 @@
                                 <tr>
                                     <td><?= $no++;?></td>
                                     <td><?= $row['name'];?></td>
-                                    <?php
-                                    $lok = $getlokasi->lokasiUser($row['id']);
-                                    ?>
-                                    <?php if($lok):?>
-                                    <td><?= $lok['lokasi'];?></td>
-                                    <?php endif;?>
                                     <?php for ($i=1; $i <= $days; $i++): ?>
                                     <?php
                                     $cek = $getabsensi->getAbsensiByDate(date($tahun1.'-'.$bulan1.'-'.$i), $row['id']);

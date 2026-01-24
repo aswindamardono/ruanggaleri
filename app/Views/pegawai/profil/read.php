@@ -196,7 +196,7 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="image" class="form-label">Foto</label>
-                                                <input type="file" name="image" id="image" class="dropify">
+                                                <input type="file" name="image" id="image" class="dropify" required>
                                                 <small class="text-danger">
                                                     <?= !empty($rusak['image']) ? validation_show_error('image') : ''; ?>
                                                 </small>
@@ -205,7 +205,7 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="ktp" class="form-label">KTP</label>
-                                                <input type="file" name="ktp" id="ktp" class="dropify">
+                                                <input type="file" name="ktp" id="ktp" class="dropify" required>
                                                 <small class="text-danger">
                                                     <?= !empty($rusak['ktp']) ? validation_show_error('ktp') : ''; ?>
                                                 </small>

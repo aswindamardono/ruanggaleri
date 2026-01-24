@@ -97,27 +97,6 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="lokasi" class="form-label">Lokasi Karyawan (Hanya untuk Pegawai)</label>
-                                    <select name="lokasi" id="lokasi"
-                                        class="form-control <?= !empty($rusak['lokasi']) ? 'is-invalid' : ''; ?>">
-                                        <option value="">-- Pilih Lokasi --</option>
-                                        <?php foreach($lokasi as $row):?>
-                                        <?php if($row['id'] ==  old('lokasi')):?>
-                                        <option value="<?= $row['id'];?>" selected><?= $row['lokasi'];?> 
-                                        </option>
-                                        <?php else:?>
-                                        <option value="<?= $row['id'];?>"><?= $row['lokasi'];?>
-                                        </option>
-                                        <?php endif;?>
-                                        <?php endforeach;?>
-                                    </select>
-                                    <small class="invalid-feedback">
-                                        <?= !empty($rusak['lokasi']) ? validation_show_error('lokasi') : ''; ?>
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
                                     <label for="role" class="form-label">Role</label>
                                     <select name="role" id="role"
                                         class="form-control <?= !empty($rusak['role']) ? 'is-invalid' : ''; ?>">

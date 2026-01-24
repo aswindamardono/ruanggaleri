@@ -28,7 +28,6 @@ class Absensi extends BaseController
         $data['absensi'] = 'Belum';
         $data['tahun'] = [date("Y"), date("Y")-1, date("Y")-2, date("Y")-3, date("Y")-4];
         $data['guru'] = $this->KaryawanModel->getUserWithGuru();
-        $data['lokasi'] = $this->LokasiModel->getLokasiWithMandor();   
         $data['setting'] = $this->PengaturanModel->find(1);
         return view('operator/absensi/read', $data);
     }
@@ -52,12 +51,6 @@ class Absensi extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Pegawai harus di isi!',
-                ],
-            ],
-            'lokasi' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Lokasi harus di isi!',
                 ],
             ],
         ]);
@@ -145,7 +138,6 @@ class Absensi extends BaseController
         $data['bulan1'] = $bulan1;
         $data['tahun1'] = $tahun1;
         $data['guru'] = $this->KaryawanModel->getUserWithGuru();
-        $data['getlokasi'] = $this->LokasiModel;   
         $data['setting'] = $this->PengaturanModel->find(1);
         $data['getabsensi'] = $this->KaryawanModel;
         $data['getabsensi2'] = $this->AbsensiModel;
@@ -195,9 +187,7 @@ class Absensi extends BaseController
         $data['bulan1'] = $bulan1;
         $data['tahun1'] = $tahun1;
         $data['guru'] = $this->KaryawanModel->getUserWithGuru();
-        $data['lokasi'] = $this->LokasiModel->getLokasiWithMandor();   
         $data['setting'] = $this->PengaturanModel->find(1);
-        $data['getlokasi'] = $this->LokasiModel; 
         $data['getabsensi'] = $this->KaryawanModel;
         $data['getabsensi2'] = $this->AbsensiModel;
         $data['getizin'] = $this->UnableModel;
@@ -207,7 +197,6 @@ class Absensi extends BaseController
     public function cetakrekap($bulan, $tahun)
     {
         $data['title'] = 'Laporan Rekap Absensi '.tanggalindo(date($tahun.'-'.$bulan.'-'));
-        $data['lokasi'] = $this->LokasiModel->getLokasiWithMandor();   
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
         $data['setting'] = $this->PengaturanModel->find(1);
         $data['bulan'] = $bulan;
@@ -221,7 +210,6 @@ class Absensi extends BaseController
         $filename = 'Laporan Rekap Absensi '.tanggalindo(date($tahun.'-'.$bulan.'-'));
         $data['setting'] = $this->PengaturanModel->find(1);
         $data['guru'] = $this->KaryawanModel->getUserWithGuru();
-        $data['lokasi'] = $this->LokasiModel->getLokasiWithMandor();   
         $data['getabsensi'] = $this->KaryawanModel;
         $data['getabsensi2'] = $this->AbsensiModel;
         $data['getizin'] = $this->UnableModel;
@@ -242,7 +230,19 @@ class Absensi extends BaseController
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
         $tanggal = date('Y-m-d');
         $data['tanggal'] = $tanggal;
-        $data['monitoring'] = $this->KaryawanModel->getUserWithGuruAndAbsensi($tanggal);
+        
+        // Get all presents/attendance records without pagination
+        $db = \Config\Database::connect();
+        $query = $db->table('presents')
+            ->select('presents.*, users.name, users.jabatan_id, jabatan.name_jabatan, jabatan.akronim')
+            ->join('users', 'users.id = presents.user_id', 'left')
+            ->join('jabatan', 'jabatan.id = users.jabatan_id', 'left')
+            ->orderBy('presents.date', 'DESC')
+            ->orderBy('presents.created_at', 'DESC');
+        
+        $monitoring = $query->get()->getResultArray();
+        
+        $data['monitoring'] = $monitoring;
         $data['setting'] = $this->PengaturanModel->find(1);
         return view('operator/monitoring/read', $data);
     }
@@ -288,13 +288,11 @@ class Absensi extends BaseController
             [ "no" => 12, "nama" => "Desember"],
         ];
         $data['tahun'] = [ date("Y"), date("Y")-1, date("Y")-2, date("Y")-3, date("Y")-4];
-        $bulan1 = date("m");
-        $tahun1 = date("Y");
-        $data['bulan1'] = $bulan1;
-        $data['tahun1'] = $tahun1;
+        $data['bulan1'] = '';
+        $data['tahun1'] = '';
         $data['guru'] = $this->KaryawanModel->getUserWithGuru();
         $data['setting'] = $this->PengaturanModel->find(1);
-        $data['izin'] = $this->KaryawanModel->getIzin($bulan1, $tahun1);
+        $data['izin'] = $this->KaryawanModel->getAllIzin();
         return view('operator/izin/read', $data);
     }
 
@@ -370,7 +368,6 @@ class Absensi extends BaseController
     public function excel($bulan, $tahun, $id)
     {
         $userGuru = $this->KaryawanModel->getUserAndJabatan($id);
-        $lokasi = $this->LokasiModel->getLokasiJadwalUser($id);   
         $filename = 'Laporan Absensi ' . $userGuru['name'] . ' ' . tanggalindo(date($tahun . '-' . $bulan . '-'));
         $absensi = $this->KaryawanModel->getAbsensi($bulan, $tahun, $id);
         $spreadsheet = new Spreadsheet();
@@ -455,12 +452,8 @@ class Absensi extends BaseController
         $row = 2;
         $no = 1;
         foreach ($guru as $a) {
-            $lok = $this->LokasiModel->lokasiUser($a['id']); 
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $a['name']);
-            if ($lok) {
-                $sheet->setCellValue('C' . $row, $lok['lokasi']);
-            }
 
             for ($i = 1; $i <= $days; $i++) {
                 $cek = $this->KaryawanModel->getAbsensiByDate(date($tahun . '-' . $bulan . '-' . $i), $a['id']);

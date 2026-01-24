@@ -92,10 +92,8 @@
                                     <td><img src="<?= base_url('assets/img/absensi/').$row['image_out'];?>"
                                             width="100px" alt=""></td>
                                     <td>
-                                        <div
-                                            class="badge <?= empty($row['hour_in'] <= $row['jam_masuk']) ? 'badge-danger' : 'badge-success' ;?>">
-                                            <small>
-                                                <?= empty($row['hour_in'] <= $row['jam_masuk']) ? 'Terlambat '.jam_terlambat($row['jam_masuk'], $row['hour_in']) : 'Tepat Waktu' ;?></small>
+                                        <div class="badge badge-info">
+                                            <small><?= !empty($row['terlambat_menit']) ? 'Terlambat '.$row['terlambat_menit'].' menit' : 'Tepat Waktu' ;?></small>
                                         </div>
                                     </td>
 
@@ -171,10 +169,6 @@
         <a href="<?= base_url('operator/karyawan');?>" class="nav-item">
             <div class="nav-icon"><i class="fas fa-users"></i></div>
             <div class="nav-label">Karyawan</div>
-        </a>
-        <a href="<?= base_url('operator/lokasi');?>" class="nav-item">
-            <div class="nav-icon"><i class="fas fa-map-marker-alt"></i></div>
-            <div class="nav-label">Lokasi</div>
         </a>
         <a href="<?= base_url('operator/jadwal');?>" class="nav-item">
             <div class="nav-icon"><i class="fas fa-calendar"></i></div>

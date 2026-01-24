@@ -53,13 +53,6 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     $routes->post('jabatan', 'Operator\Jabatan::save');
     $routes->get('jabatan/delete/(:num)', 'Operator\Jabatan::delete/$1');
     $routes->post('jabatan/update/(:num)', 'Operator\Jabatan::update/$1');
-
-    $routes->get('lokasi', 'Operator\Lokasi::index');
-    $routes->get('lokasi/create', 'Operator\Lokasi::create');
-    $routes->post('lokasi/create', 'Operator\Lokasi::save');
-    $routes->get('lokasi/delete/(:num)', 'Operator\Lokasi::delete/$1');
-    $routes->get('lokasi/edit/(:num)', 'Operator\Lokasi::edit/$1');
-    $routes->post('lokasi/edit/(:num)', 'Operator\Lokasi::update/$1');
     
     $routes->get('pengaturan', 'Operator\Pengaturan::index');
     $routes->post('pengaturan', 'Operator\Pengaturan::update');
@@ -97,6 +90,10 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     $routes->get('izin', 'Operator\Absensi::izin');
     $routes->post('izin/cari', 'Operator\Absensi::cariizin');
     $routes->post('izin/update/(:num)', 'Operator\Absensi::updateizin/$1');
+
+    $routes->get('kasbon', 'Operator\Kasbon::index');
+    $routes->post('kasbon/cari', 'Operator\Kasbon::carikasbon');
+    $routes->post('kasbon/updatekasbon/(:num)', 'Operator\Kasbon::updatekasbon/$1');
     
     $routes->get('penggajian', 'Operator\Penggajian::index');
     $routes->post('penggajian/getTerlambatOtomatis', 'Operator\Penggajian::getTerlambatOtomatis');
@@ -108,6 +105,13 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     $routes->get('penggajian/slip/(:num)/(:num)', 'Operator\Penggajian::slip/$1/$2');
     $routes->get('penggajian/excel/(:num)/(:num)', 'Operator\Penggajian::excel/$1/$2');
     $routes->get('penggajian/cetak/(:num)/(:num)', 'Operator\Penggajian::cetak/$1/$2');
+    
+    $routes->get('workorder', 'Operator\Workorder::index');
+    $routes->get('workorder/create', 'Operator\Workorder::create');
+    $routes->post('workorder/save', 'Operator\Workorder::save');
+    $routes->get('workorder/edit/(:num)', 'Operator\Workorder::edit/$1');
+    $routes->post('workorder/update/(:num)', 'Operator\Workorder::update/$1');
+    $routes->get('workorder/delete/(:num)', 'Operator\Workorder::delete/$1');
 });
 
 $routes->group('/', ['filter' => 'role:Pegawai'], function ($routes) {
@@ -123,9 +127,15 @@ $routes->group('/', ['filter' => 'role:Pegawai'], function ($routes) {
     $routes->post('izin/cari', 'Pegawai\Izin::cari');
     $routes->get('izin/edit/(:num)', 'Pegawai\Izin::edit/$1');
     $routes->post('izin/edit/(:num)', 'Pegawai\Izin::update/$1');
+
+    $routes->get('kasbon', 'Pegawai\Kasbon::index');
+    $routes->get('kasbon/create', 'Pegawai\Kasbon::create');
+    $routes->post('kasbon/save', 'Pegawai\Kasbon::save');
     
     $routes->get('riwayat', 'Pegawai\Riwayat::index');
     $routes->post('riwayat/cari', 'Pegawai\Riwayat::cari');
+
+    $routes->get('workorder', 'Pegawai\Workorder::index');
 
     $routes->get('profil', 'Pegawai\Profil::index');
     $routes->post('profil', 'Pegawai\Profil::update');

@@ -17,6 +17,13 @@ class Dashboard extends BaseController
         $data['operator'] = $this->KaryawanModel->where('jabatan_id', 3)->countAllResults();
         $data['setting'] = $this->PengaturanModel->find(1);
         $data['penggajian'] = $this->PenggajianModel;
+        
+        // Count data untuk dashboard cards
+        $data['total_workorder'] = $this->WorkOrderModel->countAllResults();
+        $data['total_pegawai'] = $this->KaryawanModel->whereIn('role', ['Pegawai'])->countAllResults();
+        $data['total_izin'] = $this->UnableModel->countAllResults();
+        $data['total_kasbon'] = $this->KasbonModel->countAllResults();
+        
         return view('operator/dashboard/read', $data);
     }
 }

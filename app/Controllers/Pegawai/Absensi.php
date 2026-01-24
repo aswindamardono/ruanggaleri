@@ -10,19 +10,35 @@ class Absensi extends BaseController
     {
         $cekAbsensi = $this->AbsensiModel->getAbsensi();
         $data['setting'] = $this->PengaturanModel->find(1);
-        $data['lokasi'] = $this->LokasiModel->getLokasiJadwalUser(session()->get('id'));        
+        $data['jadwal'] = $this->KaryawanModel->getUserJadwal(session()->get('id'));
+        
+        // Ambil jam dari jadwal, atau gunakan default jika tidak ada
+        $jam_masuk = '08:00:00';
+        $jam_keluar = '17:00:00';
+        
+        if (!empty($data['jadwal'])) {
+            $jam_masuk = $data['jadwal']['jam_masuk'] ?? '08:00:00';
+            $jam_keluar = $data['jadwal']['jam_keluar'] ?? '17:00:00';
+        }
+        
+        $data['lokasi'] = [
+            'lokasi' => '-',
+            'lat' => 0,
+            'long' => 0,
+            'radius' => 0,
+            'jam_masuk' => $jam_masuk,
+            'jam_keluar' => $jam_keluar
+        ];
+        
         if ($cekAbsensi == null) {
             $data['title'] = 'Absensi Masuk';
             $data['user'] = $this->KaryawanModel->find(session()->get('id'));
-            $data['jadwal'] = $this->KaryawanModel->getUserJadwal(session()->get('id'));
             $data['izin'] = $this->UnableModel->check(session()->get('id'));
-            // print_r($data['lokasi']);exit();
             return view('pegawai/absen/in', $data);
         } else {
             if ($cekAbsensi['image_out'] == null && $cekAbsensi['location_out'] == null) {
                 $data['title'] = 'Absensi Pulang';
                 $data['user'] = $this->KaryawanModel->find(session()->get('id'));
-                $data['jadwal'] = $this->KaryawanModel->getUserJadwal(session()->get('id'));
                 return view('pegawai/absen/out', $data);
             } else {
                 $data['title'] = 'Sudah Absensi';
@@ -47,34 +63,12 @@ class Absensi extends BaseController
 
             $lokasi = $this->request->getPost('lokasi');
             $user_id = session()->get('id');
-            // print_r($user_id);
-            // var_dump($lokasi);
+            // Fitur pembatasan area lokasi telah dihilangkan - karyawan dapat absen dari mana saja
             if (empty($lokasi)) {
-                echo 'error1|Lokasi tidak terdeteksi pastikan perangkat anda lokasinya aktif';
-            } else {
-                $setting = $this->PengaturanModel->find(1);
-                $lok = $this->LokasiModel->getLokasiJadwalUser($user_id);        
-                $lokasi_user = explode(",", $lokasi);
-                // print_r($lok);
-                // var_dump($lok); 
-                $lat_user = $lokasi_user[0];
-                $long_user = $lokasi_user[1];
-                $lat_setting = $lok['lat'];
-                $long_setting = $lok['long'];
-                $jarak = $this->distance($lat_user, $long_user, $lat_setting, $long_setting);
-                // var_dump($jarak); 
-                $radius = round($jarak);
-
-                if ($radius > $lok['radius']) {
-                    $selisih = $radius - $lok['radius'];
-                    if ($selisih < 1000) {
-                        echo 'error2|Maaf anda tidak bisa absen karena berada '.$selisih.' meter diluar jangkauan ';
-                    } else {
-                        $selisih2 = round($selisih/1000, 2);
-                        echo 'error2|Maaf anda tidak bisa absen karena berada '.$selisih2.' km diluar jangkauan ';
-                    }
-                } else {
-                    if (file_put_contents($file_path, $image_base64)) {
+                // Lokasi opsional jika fitur lokasi tidak aktif di device
+                $lokasi = '0,0';
+            }
+            if (file_put_contents($file_path, $image_base64)) {
                         // Hitung terlambat_menit berdasarkan jadwal
                         $hari_ini = date('D');
                         $jam_masuk_actual = date('H:i:s');
@@ -110,10 +104,8 @@ class Absensi extends BaseController
                             'location_out' => '',
                             'terlambat_menit' => $terlambat_menit,
                         ]);
-                        
-                        echo 'success|Absensi berhasil. Terima Kasih, Selamat Bekerja';
-                    }
-                }
+                
+                echo 'success|Absensi berhasil. Terima Kasih, Selamat Bekerja';
             }
         } catch (\Exception $e) {
             echo 'error1|Error: ' . $e->getMessage();
@@ -122,6 +114,8 @@ class Absensi extends BaseController
 
     public function distance($lat1, $lon1, $lat2, $lon2)
     {
+        // Method ini tidak lagi digunakan karena fitur pembatasan lokasi telah dihilangkan
+        // Disimpan untuk backward compatibility
         $theta = $lon1 - $lon2;
         $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
         $miles = acos($miles);
@@ -133,6 +127,10 @@ class Absensi extends BaseController
         $meters = $kilometers * 1000;
         return $meters;
     }
+
+    /**
+     * @deprecated Tidak lagi digunakan - fitur pembatasan lokasi telah dihilangkan
+     */
 
     public function pulang()
     {
@@ -147,32 +145,18 @@ class Absensi extends BaseController
         $file_path = $image_path . $file_name;
         $user_id = session()->get('id');
         $lokasi = $this->request->getPost('lokasi');
+        // Fitur pembatasan area lokasi telah dihilangkan - karyawan dapat absen dari mana saja
         if (empty($lokasi)) {
-            echo 'error1|Lokasi tidak terdeteksi pastikan perangkat anda lokasinya aktif';
-        } else {
-            $setting = $this->PengaturanModel->find(1);
-            $lok = $this->LokasiModel->getLokasiJadwalUser($user_id);         
-            $lokasi_user = explode(",", $lokasi);
-            $lat_user = $lokasi_user[0];
-            $long_user = $lokasi_user[1];
-            $lat_setting = $lok['lat'];
-            $long_setting = $lok['long'];
-            $jarak = $this->distance($lat_user, $long_user, $lat_setting, $long_setting);
-            $radius = round($jarak);
-
-            if ($radius > $lok['radius']) {
-                $selisih = $radius - $lok['radius'];
-                echo 'error2|Maaf anda tidak bisa absen karena berada '.$selisih.' meter diluar jangkauan ';
-            } else {
-                if (file_put_contents($file_path, $image_base64)) {
-                    $this->AbsensiModel->update($cekAbsensi['id'], [
-                        'hour_out' => date('H:i:s'),
-                        'image_out' => $file_name,
-                        'location_out' => $lokasi,
-                    ]);
-                    echo 'success|Terima Kasih, Hati - Hati Dijalan';
-                }
-            }
+            // Lokasi opsional jika fitur lokasi tidak aktif di device
+            $lokasi = '0,0';
+        }
+        if (file_put_contents($file_path, $image_base64)) {
+            $this->AbsensiModel->update($cekAbsensi['id'], [
+                'hour_out' => date('H:i:s'),
+                'image_out' => $file_name,
+                'location_out' => $lokasi,
+            ]);
+            echo 'success|Terima Kasih, Hati - Hati Dijalan';
         }
     }
 }

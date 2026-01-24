@@ -11,6 +11,57 @@
         0%, 100% { opacity: 0.3; transform: scale(1); }
         50% { opacity: 0.6; transform: scale(1.2); }
     }
+    
+    /* Clickable Stats Card */
+    .stat-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+    
+    .stat-card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .stat-card-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stat-card-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin-top: 10px;
+    }
+    
+    .stat-card-bg-workorder {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .stat-card-bg-pegawai {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .stat-card-bg-izin {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .stat-card-bg-kasbon {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    
     .bottom-nav {
         position: fixed;
         bottom: 0;
@@ -71,66 +122,50 @@
         </div>
         <div class="section-body">
             <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-primary">
-                            <i class="fas fa-map-pin"></i>
+                <!-- Workorder Card -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <a href="<?= base_url('operator/workorder');?>" class="card stat-card stat-card-bg-workorder" style="text-decoration: none; display: block; padding: 2rem; height: 100%;">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-tasks"></i>
                         </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Jabatan</h4>
-                            </div>
-                            <div class="card-body">
-                                <?= $jabatan;?>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="stat-card-title">Work Order</div>
+                        <div class="stat-card-value"><?= $total_workorder;?></div>
+                    </a>
                 </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-success">
-                            <i class="fas fa-user-tie"></i>
+                
+                <!-- Pegawai Card -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <a href="<?= base_url('operator/karyawan');?>" class="card stat-card stat-card-bg-pegawai" style="text-decoration: none; display: block; padding: 2rem; height: 100%;">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-users"></i>
                         </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Pegawai Kebersihan SMA</h4>
-                            </div>
-                            <div class="card-body">
-                                <?= $gty;?>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="stat-card-title">Pegawai</div>
+                        <div class="stat-card-value"><?= $total_pegawai;?></div>
+                    </a>
                 </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-danger">
-                            <i class="fas fa-user-tie"></i>
+                
+                <!-- Izin Card -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <a href="<?= base_url('operator/izin');?>" class="card stat-card stat-card-bg-izin" style="text-decoration: none; display: block; padding: 2rem; height: 100%;">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-calendar-times"></i>
                         </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Pegawai Kebersihan SD</h4>
-                            </div>
-                            <div class="card-body">
-                                <?= $gtty;?>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="stat-card-title">Izin</div>
+                        <div class="stat-card-value"><?= $total_izin;?></div>
+                    </a>
                 </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="fas fa-user-tie"></i>
+                
+                <!-- Kasbon Card -->
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <a href="<?= base_url('operator/kasbon');?>" class="card stat-card stat-card-bg-kasbon" style="text-decoration: none; display: block; padding: 2rem; height: 100%;">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
                         </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>UPTD</h4>
-                            </div>
-                            <div class="card-body">
-                                <?= $uptd;?>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="stat-card-title">Kasbon</div>
+                        <div class="stat-card-value"><?= $total_kasbon;?></div>
+                    </a>
                 </div>
+                
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">

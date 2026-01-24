@@ -10,7 +10,7 @@ class Jadwal extends BaseController
     {
         $data['title'] = 'Jadwal';
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
-        $data['jadwal'] = $this->KaryawanModel->getUserWithLokasi();
+        $data['jadwal'] = $this->KaryawanModel->getUserWithJabatan();
         $data['setting'] = $this->PengaturanModel->find(1);
         return view('operator/jadwal/read', $data);
     }
@@ -46,12 +46,6 @@ class Jadwal extends BaseController
     public function save()
     {
         $user_id = $this->request->getPost('user_id');
-        
-        // --- AMBIL LOKASI MANUAL ---
-        $db = \Config\Database::connect();
-        $userRow = $db->table('users')->getWhere(['id' => $user_id])->getRowArray();
-        $lokasi_fix = $userRow ? $userRow['lokasi_id'] : 0;
-        // ---------------------------
 
         $hari = $this->request->getPost('hari');
         $jam_masuk = $this->request->getPost('jam_masuk');
@@ -69,7 +63,7 @@ class Jadwal extends BaseController
                 'jam_mengajar'  => $jam_mengajar[$i],
                 'status'        => $status[$i],
                 'status_backup' => $status[$i],
-                'lokasi_id'     => $lokasi_fix
+                'lokasi_id'     => 0
             ];
         };
         $this->JadwalModel->insertBatch($data);
@@ -77,15 +71,9 @@ class Jadwal extends BaseController
         return redirect()->to(base_url('operator/jadwal'));
     }
 
-    // --- BAGIAN INI YANG DIPERBAIKI TOTAL ---
     public function update()
     {
         $user_id = $this->request->getPost('user_id');
-
-        // 1. Pastikan Lokasi ID diambil dari user yang sedang diedit
-        $db = \Config\Database::connect();
-        $userRow = $db->table('users')->getWhere(['id' => $user_id])->getRowArray();
-        $lokasi_fix = $userRow ? $userRow['lokasi_id'] : 0;
 
         $hari = $this->request->getPost('hari');
         $jam_masuk = $this->request->getPost('jam_masuk');
@@ -93,8 +81,7 @@ class Jadwal extends BaseController
         $jam_mengajar = $this->request->getPost('jam_mengajar');
         $status = $this->request->getPost('status');
         
-        // 2. Gunakan Loop Update manual daripada updateBatch
-        // Ini menjamin update HANYA terjadi pada user_id dan hari yang sesuai
+        // Gunakan Loop Update manual untuk update setiap hari jadwal
         for ($i = 0; $i < count($hari); $i++) {
             
             $dataUpdate = [
@@ -103,13 +90,13 @@ class Jadwal extends BaseController
                 'jam_mengajar'  => $jam_mengajar[$i],
                 'status'        => $status[$i],
                 'status_backup' => $status[$i],
-                'lokasi_id'     => $lokasi_fix // Lokasi user ini saja
+                'lokasi_id'     => 0
             ];
 
-            // KUNCI UTAMA: Where user_id AND hari
+            // Update berdasarkan user_id dan hari
             $this->JadwalModel
-                ->where('user_id', $user_id) // Kunci Usernya
-                ->where('hari', $hari[$i])   // Kunci Harinya
+                ->where('user_id', $user_id)
+                ->where('hari', $hari[$i])
                 ->set($dataUpdate)
                 ->update();
         }

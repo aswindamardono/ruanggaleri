@@ -30,10 +30,10 @@
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Tanggal</th>
+                                    <th>Tanggal Pengajuan</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
-                                    <th>Status</th>
+                                    <th>Jumlah</th>
                                     <th>Persetujuan</th>
                                     <th width="15%">Aksi</th>
 
@@ -41,13 +41,13 @@
                             </thead>
                             <tbody>
                                 <?php $no = 1;?>
-                                <?php foreach ($izin as $row):?>
+                                <?php foreach ($kasbon as $row):?>
                                 <tr>
                                     <td><?= $no++;?></td>
-                                    <td><?= tanggalindo($row['date']);?></td>
+                                    <td><?= tanggalindo($row['created_at']);?></td>
                                     <td><?= $row['name'];?></td>
                                     <td><?= $row['name_jabatan'];?> (<?= $row['akronim'];?>)</td>
-                                    <td><?= $row['status'];?></td>
+                                    <td>Rp <?= number_format($row['nominal'], 0, ',', '.');?></td>
                                     <td>
                                         <?php if($row["persetujuan"] == 1):?>
                                         <span class="badge badge-success">
@@ -84,7 +84,7 @@
         </div>
     </section>
 </div>
-<?php foreach($izin as $row):?>
+<?php foreach($kasbon as $row):?>
 <div class="modal fade" tabindex="-1" role="dialog" id="edit<?= $row["id"];?>">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -94,13 +94,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="<?= base_url("operator/izin/update/").$row["id"];?>" autocomplete="off">
+            <form method="post" action="<?= base_url("operator/kasbon/updatekasbon/").$row["id"];?>" autocomplete="off">
                 <div class="modal-body">
                     <?= csrf_field();?>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <img src="<?= base_url('assets/img/izin/').$row['image'];?>" class="img-fluid mb-3" alt="">
-                        </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="keterangan" class="form-label">Nama</label>
@@ -109,6 +106,16 @@
                             <div class="form-group">
                                 <label for="keterangan" class="form-label">Jabatan</label>
                                 <p><?= $row['name_jabatan'];?> (<?= $row['akronim'];?>)</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="keterangan" class="form-label">Jumlah Kasbon</label>
+                                <p>Rp <?= number_format($row['nominal'], 0, ',', '.');?></p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="keterangan" class="form-label">Tanggal Pengajuan</label>
+                                <p><?= tanggalindo($row['created_at']);?></p>
                             </div>
                             <div class="form-group">
                                 <label for="keterangan" class="form-label">Keterangan</label>

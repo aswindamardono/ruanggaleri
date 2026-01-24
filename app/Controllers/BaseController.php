@@ -42,6 +42,21 @@ abstract class BaseController extends Controller
      * The creation of dynamic property is deprecated in PHP 8.2.
      */
     // protected $session;
+    protected $db;
+    protected $JadwalModel;
+    protected $JabatanModel;
+    protected $LokasiModel;
+    protected $KaryawanModel;
+    protected $PengaturanModel;
+    protected $PenggajianModel;
+    protected $AbsensiModel;
+    protected $TokenModel;
+    protected $UnableModel;
+    protected $KasbonModel;
+    protected $EmailModel;
+    protected $WorkOrderModel;
+    protected $WorkorderPegawaiModel;
+    protected $Dompdf;
 
     /**
      * Constructor.
@@ -55,6 +70,7 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+        $this->db = \Config\Database::connect();
         $this->JadwalModel = new \App\Models\JadwalModel();
         $this->JabatanModel = new \App\Models\JabatanModel();
         $this->LokasiModel = new \App\Models\LokasiModel();
@@ -64,7 +80,10 @@ abstract class BaseController extends Controller
         $this->AbsensiModel = new \App\Models\AbsensiModel();
         $this->TokenModel = new \App\Models\TokenModel();
         $this->UnableModel = new \App\Models\UnableModel();
+        $this->KasbonModel = new \App\Models\KasbonModel();
         $this->EmailModel = new \App\Models\EmailModel();
+        $this->WorkOrderModel = new \App\Models\WorkOrderModel();
+        $this->WorkorderPegawaiModel = new \App\Models\WorkorderPegawaiModel();
         $this->Dompdf = new \Dompdf\Dompdf;
     }
 }

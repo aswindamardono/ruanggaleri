@@ -25,7 +25,7 @@
                     <div class="font-weight-bold"><?= $title;?></div>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" autocomplete="off">
+                    <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
                         <?= csrf_field();?>
                         <div class="row">
                             <div class="col-lg-6">
@@ -48,6 +48,18 @@
                                     <small class="invalid-feedback">
                                         <?= !empty($rusak['nik']) ? validation_show_error('nik') : ''; ?>
                                     </small>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="ktp" class="form-label">KTP (File)</label>
+                                    <input type="file" name="ktp" id="ktp" class="form-control dropify" 
+                                        data-default-file="<?= !empty($karyawan['ktp']) ? base_url('assets/img/user/'.$karyawan['ktp']) : ''; ?>"
+                                        accept="image/*,.pdf">
+                                    <small class="invalid-feedback">
+                                        <?= !empty($rusak['ktp']) ? validation_show_error('ktp') : ''; ?>
+                                    </small>
+                                    <small class="form-text text-muted">Format: JPG, PNG, PDF</small>
                                 </div>
                             </div>
                             <div class=" col-lg-6">
@@ -92,27 +104,6 @@
                                     </select>
                                     <small class="invalid-feedback">
                                         <?= !empty($rusak['jabatan']) ? validation_show_error('jabatan') : ''; ?>
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="lokasi" class="form-label">Lokasi Karyawan (Hanya untuk Pegawai)</label>
-                                    <select name="lokasi" id="lokasi"
-                                        class="form-control <?= !empty($rusak['lokasi']) ? 'is-invalid' : ''; ?>">
-                                        <option value="">-- Pilih Lokasi --</option>
-                                        <?php foreach($lokasi as $row):?>
-                                        <?php if($row['id'] ==  old('lokasi', $karyawan['lokasi_id'])):?>
-                                        <option value="<?= $row['id'];?>" selected><?= $row['lokasi'];?>
-                                        </option>
-                                        <?php else:?>
-                                        <option value="<?= $row['id'];?>"><?= $row['lokasi'];?>
-                                        </option>
-                                        <?php endif;?>
-                                        <?php endforeach;?>
-                                    </select>
-                                    <small class="invalid-feedback">
-                                        <?= !empty($rusak['lokasi']) ? validation_show_error('lokasi') : ''; ?>
                                     </small>
                                 </div>
                             </div>

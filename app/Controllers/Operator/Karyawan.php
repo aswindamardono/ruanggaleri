@@ -20,7 +20,6 @@ class Karyawan extends BaseController
     {
         $data['title'] = 'Tambah Karyawan';
         $data['jabatan'] = $this->JabatanModel->findAll();
-        $data['lokasi'] = $this->LokasiModel->findAll();
         $data['role'] = ['Mandor', 'Pegawai', 'Operator'];
         $data['status'] = ['Aktif', 'Tidak Aktif'];
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
@@ -109,84 +108,20 @@ class Karyawan extends BaseController
         $salt = base64_encode(random_bytes(16));
         $passwordHash = hash('sha256', $password.$salt);
 
-        // --- PERBAIKAN: Logika dipindah ke dalam IF agar aman ---
-        
-        // Cek Role Pegawai & Ada input Lokasi
-        if ($this->request->getPost('role') == 'Pegawai' && $this->request->getPost('lokasi'))
-        {
-            // Ambil data lokasi (dipindah ke sini supaya tidak error kalau rolenya bukan pegawai)
-            $lokasi = $this->LokasiModel->find($this->request->getPost('lokasi'));
-            
-            // Default nilai jadwal jika master jadwal lokasi tidak ditemukan
-            $jam_masuk_default = '08:00:00';
-            $jam_keluar_default = '17:00:00';
-
-            // Cek Master Jadwal berdasarkan User ID pemilik lokasi (Mandor)
-            if ($lokasi) {
-                $cekJadwal = $this->JadwalModel->checkJadwal($lokasi['user_id']);
-                // Ambil jam dari master jika ada, kalau kosong pakai default
-                if (!empty($cekJadwal) && isset($cekJadwal[0])) {
-                    $jam_masuk_default = $cekJadwal[0]['jam_masuk'];
-                    $jam_keluar_default = $cekJadwal[0]['jam_keluar'];
-                }
-            }
-
-            // Insert Data Karyawan
-            $this->KaryawanModel->insert([
-                'name' =>  $this->request->getPost('name'),
-                'email' =>  $this->request->getPost('email'),
-                'nik' =>  $this->request->getPost('nik'),
-                'phone' =>  $this->request->getPost('phone'),
-                'jabatan_id' =>  $this->request->getPost('jabatan'),
-                'lokasi_id' =>  $this->request->getPost('lokasi'),
-                'role' =>  $this->request->getPost('role'),
-                'is_active' =>  $this->request->getPost('status'),
-                'alamat' =>  $this->request->getPost('alamat'),
-                'password' => $passwordHash,
-                'salt' => $salt,
-            ]);
-
-            $user_id = $this->KaryawanModel->getInsertID();
-            $hari = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; // Array 7 items
-            
-            $data = [];
-            
-            // --- PERBAIKAN UTAMA DI SINI ---
-            // Ubah loop dari 8 menjadi 7 (atau count($hari))
-            for ($i = 0; $i < count($hari); $i++) {
-                $data[] = [
-                    'user_id' => $user_id,
-                    'hari' => $hari[$i],
-                    'jam_masuk' => $jam_masuk_default, // Pakai variabel aman
-                    'jam_keluar' => $jam_keluar_default, // Pakai variabel aman
-                    'jam_mengajar' => '6',
-                    'status' => '1',
-                    'status_backup' => '1',
-                    'lokasi_id' => $lokasi ? $lokasi['id'] : 0, // Insert Lokasi ID sekalian
-                ];
-            };
-            
-            // Insert Batch Jadwal
-            $this->JadwalModel->insertBatch($data);
-        }
-
-        // Logic untuk Non-Pegawai (Mandor/Operator)
-        if ($this->request->getPost('role') != 'Pegawai')
-        {
-            $this->KaryawanModel->insert([
-                'name' =>  $this->request->getPost('name'),
-                'email' =>  $this->request->getPost('email'),
-                'nik' =>  $this->request->getPost('nik'),
-                'phone' =>  $this->request->getPost('phone'),
-                'jabatan_id' =>  $this->request->getPost('jabatan'),
-                'lokasi_id' =>  0,
-                'role' =>  $this->request->getPost('role'),
-                'is_active' =>  $this->request->getPost('status'),
-                'alamat' =>  $this->request->getPost('alamat'),
-                'password' => $passwordHash,
-                'salt' => $salt,
-            ]);
-        }
+        // Insert Data Karyawan
+        $this->KaryawanModel->insert([
+            'name' =>  $this->request->getPost('name'),
+            'email' =>  $this->request->getPost('email'),
+            'nik' =>  $this->request->getPost('nik'),
+            'phone' =>  $this->request->getPost('phone'),
+            'jabatan_id' =>  $this->request->getPost('jabatan'),
+            'lokasi_id' =>  0,
+            'role' =>  $this->request->getPost('role'),
+            'is_active' =>  $this->request->getPost('status'),
+            'alamat' =>  $this->request->getPost('alamat'),
+            'password' => $passwordHash,
+            'salt' => $salt,
+        ]);
 
         session()->setFlashdata('pesan', 'Data Karyawan berhasil ditambahkan.');
         return redirect()->to(base_url('/operator/karyawan'));
@@ -213,7 +148,6 @@ class Karyawan extends BaseController
         $data['title'] = 'Edit Karyawan';
         $data['karyawan'] = $this->KaryawanModel->find($id);
         $data['jabatan'] = $this->JabatanModel->findAll();
-        $data['lokasi'] = $this->LokasiModel->findAll();
         $data['role'] = ['Mandor', 'Pegawai', 'Operator'];
         $data['status'] = ['Aktif', 'Tidak Aktif'];
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
@@ -254,12 +188,6 @@ class Karyawan extends BaseController
                     'required' => 'Jabatan harus di isi!',
                 ],
             ],
-            'lokasi' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Jika bukan Mandor Lokasi harus di pilih!',
-                ],
-            ],
             'role' => [
                 'rules' => 'required',
                 'errors' => [
@@ -278,22 +206,48 @@ class Karyawan extends BaseController
                     'required' => 'Alamat harus di isi!',
                 ],
             ],
+            'ktp' => [
+                'rules' => 'is_image[ktp]|max_size[ktp,5120]',
+                'errors' => [
+                    'is_image' => 'File KTP harus berupa gambar atau PDF!',
+                    'max_size' => 'Ukuran file KTP tidak boleh lebih dari 5MB!',
+                ],
+            ],
         ]);
         if (!$validate) {
             return redirect()->to(base_url('/operator/karyawan/edit/'.$id))->withInput();
         }
 
-        $this->KaryawanModel->update($id, [
+        $ktp = $this->request->getFile('ktp');
+        $dataUpdate = [
             'name' =>  $this->request->getPost('name'),
             'email' =>  $this->request->getPost('email'),
             'nik' =>  $this->request->getPost('nik'),
             'phone' =>  $this->request->getPost('phone'),
             'jabatan_id' =>  $this->request->getPost('jabatan'),
-            'lokasi_id' =>  $this->request->getPost('lokasi'),
+            'lokasi_id' =>  0,
             'role' =>  $this->request->getPost('role'),
             'is_active' =>  $this->request->getPost('status'),
             'alamat' =>  $this->request->getPost('alamat'),
-        ]);
+        ];
+
+        // Handle KTP file upload
+        if ($ktp && $ktp->isValid() && !$ktp->hasMoved()) {
+            $user = $this->KaryawanModel->find($id);
+            $oldKtp = $user['ktp'];
+            
+            // Delete old KTP if exists
+            if ($oldKtp && file_exists('assets/img/user/' . $oldKtp)) {
+                unlink('assets/img/user/' . $oldKtp);
+            }
+
+            // Upload new KTP
+            $newKtpName = $ktp->getRandomName();
+            $ktp->move('assets/img/user/', $newKtpName);
+            $dataUpdate['ktp'] = $newKtpName;
+        }
+
+        $this->KaryawanModel->update($id, $dataUpdate);
         session()->setFlashdata('pesan', 'Data Karyawan berhasil di ubah');
         return redirect()->to(base_url('/operator/karyawan'));
     }

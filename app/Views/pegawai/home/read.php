@@ -577,4 +577,81 @@
     </div>
 </div>
 
+<!-- Modal Workorder Baru -->
+<div class="modal fade" id="workorderModal" tabindex="-1" role="dialog" aria-labelledby="workorderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="workorderModalLabel">📋 Work Order Baru</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?php if (!empty($new_workorder)): ?>
+                    <div class="alert alert-info">
+                        <i class="fas fa-bell"></i> Anda menerima tugas baru dari operator!
+                    </div>
+                    <div class="workorder-details">
+                        <div class="detail-row">
+                            <label class="detail-label">📅 Tanggal:</label>
+                            <span class="detail-value"><?= date('d F Y', strtotime($new_workorder['tanggal'])); ?></span>
+                        </div>
+                        <div class="detail-row">
+                            <label class="detail-label">📝 Keterangan:</label>
+                            <p class="detail-value" style="white-space: pre-wrap; margin-top: 8px;"><?= nl2br($new_workorder['keterangan']); ?></p>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="alert alert-secondary">
+                        Tidak ada work order baru untuk Anda saat ini.
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <a href="<?= base_url('workorder'); ?>" class="btn btn-primary">Lihat Semua Tugas</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .workorder-details {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+    }
+    
+    .detail-row {
+        margin-bottom: 15px;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .detail-value {
+        color: #666;
+        font-size: 0.95rem;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (!empty($new_workorder)): ?>
+            // Tampilkan modal jika ada workorder baru
+            var workorderModal = new bootstrap.Modal(document.getElementById('workorderModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            workorderModal.show();
+        <?php endif; ?>
+    });
+</script>
+
 <?= $this->endSection('content') ?>

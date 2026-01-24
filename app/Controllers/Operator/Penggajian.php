@@ -127,10 +127,10 @@ class Penggajian extends BaseController
                     'required' => 'Gaji Pokok harus di isi!',
                 ],
             ],
-            'tunjangan' => [
+            'kasbon' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'Tunjangan harus di isi!',
+                    'required' => 'Kasbon harus di isi!',
                 ],
             ],
             'lain_lain' => [
@@ -172,7 +172,7 @@ class Penggajian extends BaseController
         } else {
             // Hitung potongan gaji (terlambat) dan bonus lembur
             $gaji_pokok = (int)$this->request->getPost('gaji_pokok');
-            $tunjangan = (int)$this->request->getPost('tunjangan');
+            $kasbon = (int)$this->request->getPost('kasbon');
             $lain_lain = (int)$this->request->getPost('lain_lain');
             $lembur = (int)$this->request->getPost('lembur');
             $terlambat = (int)$this->request->getPost('terlambat');
@@ -189,7 +189,7 @@ class Penggajian extends BaseController
             $potongan_terlambat = $terlambat * 500;
             
             // Total gaji final
-            $total = $gaji_pokok + $tunjangan + $lain_lain + $bonus_lembur - $potongan_terlambat;
+            $total = $gaji_pokok - $kasbon + $lain_lain + $bonus_lembur - $potongan_terlambat;
             
             $this->PenggajianModel->insert([
                 'user_id' => $guru,
@@ -199,7 +199,7 @@ class Penggajian extends BaseController
                 'total_absensi' => $this->AbsensiModel->getHadir($guru, $bulan, $tahun),
                 'gaji' => $this->request->getPost('gaji'),
                 'gaji_pokok' => $gaji_pokok,
-                'tunjangan' => $tunjangan,
+                'kasbon' => $kasbon,
                 'lain_lain' => $lain_lain,
                 'lembur' => $lembur,
                 'terlambat' => $terlambat,
@@ -228,10 +228,10 @@ class Penggajian extends BaseController
                     'required' => 'Gaji Pokok harus di isi!',
                 ],
             ],
-            'tunjangan1' => [
+            'kasbon1' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'Tunjangan harus di isi!',
+                    'required' => 'Kasbon harus di isi!',
                 ],
             ],
             'lain_lain1' => [
@@ -268,7 +268,7 @@ class Penggajian extends BaseController
         
         // Hitung potongan gaji (terlambat) dan bonus lembur
         $gaji_pokok = (int)$this->request->getPost('gaji_pokok1');
-        $tunjangan = (int)$this->request->getPost('tunjangan1');
+        $kasbon = (int)$this->request->getPost('kasbon1');
         $lain_lain = (int)$this->request->getPost('lain_lain1');
         $lembur = (int)$this->request->getPost('lembur1');
         $terlambat = (int)$this->request->getPost('terlambat1');
@@ -284,11 +284,11 @@ class Penggajian extends BaseController
         $potongan_terlambat = $terlambat * 500;
         
         // Total gaji final
-        $total = $gaji_pokok + $tunjangan + $lain_lain + $bonus_lembur - $potongan_terlambat;
+        $total = $gaji_pokok - $kasbon + $lain_lain + $bonus_lembur - $potongan_terlambat;
 
         $this->PenggajianModel->update($id, [
             'gaji_pokok' => $gaji_pokok,
-            'tunjangan' => $tunjangan,
+            'kasbon' => $kasbon,
             'lain_lain' => $lain_lain,
             'lembur' => $lembur,
             'terlambat' => $terlambat,
@@ -380,7 +380,7 @@ class Penggajian extends BaseController
         $sheet->setCellValue('D1', 'Total Absen');
         $sheet->setCellValue('E1', 'Total Jam');
         $sheet->setCellValue('F1', 'Gaji Pokok');
-        $sheet->setCellValue('G1', 'Tunjangan');
+        $sheet->setCellValue('G1', 'Kasbon');
         $sheet->setCellValue('H1', 'Lain - lain');
         $sheet->setCellValue('I1', 'Total');
 
@@ -393,7 +393,7 @@ class Penggajian extends BaseController
             $sheet->setCellValue('D' . $row, $a['total_absensi']);
             $sheet->setCellValue('E' . $row, $a['total_jam']);
             $sheet->setCellValue('F' . $row, $a['gaji_pokok']);
-            $sheet->setCellValue('G' . $row, $a['tunjangan']);
+            $sheet->setCellValue('G' . $row, $a['kasbon']);
             $sheet->setCellValue('H' . $row, $a['lain_lain']);
             $sheet->setCellValue('I' . $row, '=SUM(F'.$row.':H'.$row.')');
 

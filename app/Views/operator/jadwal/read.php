@@ -46,7 +46,7 @@
                                     </td>
                                     <td><?= $row['name'];?></td>
                                     <td><?= $row['name_jabatan'];?> (<?= $row['akronim'];?>)</td>
-                                    <td><?= $row['lokasi'];?></td>
+                                    <td><?= isset($row['lokasi']) ? $row['lokasi'] : '-'; ?></td>
                                     <td>
                                         <div class="d-flex">
                                             <div>

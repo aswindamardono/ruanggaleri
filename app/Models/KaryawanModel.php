@@ -204,6 +204,37 @@ class KaryawanModel extends Model
         ->get()
         ->getResultArray();
     }
+
+    public function getAllIzin()
+    {
+        return $this->select('unables.*, users.name, jabatan.name_jabatan, jabatan.akronim')
+        ->join('unables', 'unables.user_id = users.id')
+        ->join('jabatan', 'jabatan.id = users.jabatan_id')
+        ->orderBy('unables.date', 'DESC')
+        ->get()
+        ->getResultArray();
+    }
+
+    public function getKasbon($bulan, $tahun)
+    {
+        return $this->select('kasbon.*, users.name, jabatan.name_jabatan, jabatan.akronim')
+        ->join('kasbon', 'kasbon.user_id = users.id')
+        ->join('jabatan', 'jabatan.id = users.jabatan_id')
+        ->where('MONTH(kasbon.created_at)', $bulan)
+        ->where('YEAR(kasbon.created_at)', $tahun)
+        ->get()
+        ->getResultArray();
+    }
+
+    public function getAllKasbon()
+    {
+        return $this->select('kasbon.*, users.name, jabatan.name_jabatan, jabatan.akronim')
+        ->join('kasbon', 'kasbon.user_id = users.id')
+        ->join('jabatan', 'jabatan.id = users.jabatan_id')
+        ->orderBy('kasbon.created_at', 'DESC')
+        ->get()
+        ->getResultArray();
+    }
     
     public function getPenggajian($bulan, $tahun)
     {

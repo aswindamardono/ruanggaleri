@@ -69,10 +69,13 @@ class LokasiModel extends Model
 
     public function getLokasiJadwalUser($id)
     {        
-        return $this->select('users.*, jadwal.*, lokasi.*')
-            ->join('jadwal', 'lokasi.id = jadwal.lokasi_id') 
-            ->join('users', 'users.lokasi_id = lokasi.id')            
-            ->where('jadwal.user_id', $id)            
+        // Query diubah untuk mengambil data jadwal tanpa perlu lokasi
+        // Sehingga karyawan tanpa lokasi_id masih bisa absen berdasarkan jadwal
+        $db = \Config\Database::connect();
+        return $db->table('jadwal')
+            ->select('jadwal.*, users.id, users.name')
+            ->join('users', 'users.id = jadwal.user_id')
+            ->where('jadwal.user_id', $id)
             ->get()
             ->getRowArray();
     }

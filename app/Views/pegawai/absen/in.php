@@ -188,10 +188,10 @@
                                     $now = date('H:i:s');
                                     $time_absen = null;
                                     $time_pulang = null;
-                                    if($jadwal != null && isset($lokasi['lokasi'])):
+                                    if($jadwal != null):
                                         $jam_masuk = strtotime($lokasi['jam_masuk']);
                                         $jam_keluar = strtotime($lokasi['jam_keluar']);
-                                        $time_absen =  date('H:i:s', strtotime('-'.$lokasi['sebelum_masuk'].'minutes', $jam_masuk));
+                                        $time_absen =  date('H:i:s', strtotime('-15 minutes', $jam_masuk));
                                         $time_pulang =  date('H:i:s', $jam_keluar);
                                     ?>
                                 <?php if($izin != null) {?>
@@ -262,13 +262,6 @@ Webcam.set({
 });
 Webcam.attach('#my_camera');
 
-// if (navigator.geolocation) {
-//     console.log(navigator.geolocation.watchPosition(showPosition));
-//     navigator.geolocation.watchPosition(showPosition);
-// } else {
-//     alert("Geolocation is not supported by this browser.");
-// }
-
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
         function(position) {
@@ -279,12 +272,6 @@ if (navigator.geolocation) {
 
             alert("📍 Lokasi Anda:\nLatitude: " + lat + "\nLongitude: " + lng);
 
-            // contoh menampilkan di peta:
-            // L.marker([lat, lng]).addTo(map)
-            //   .bindPopup("📍 Lokasi Anda").openPopup();
-
-            // map.setView([lat, lng], 15);
-            
             var map = L.map('map').setView([lat, lng], 15);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -294,9 +281,11 @@ if (navigator.geolocation) {
             L.marker([lat, lng]).addTo(map)
                 .bindPopup("📍 Lokasi Anda").openPopup();
         
+            // Hanya tampilkan marker kantor jika lokasi ada
+            <?php if($lokasi['lat'] != 0 && $lokasi['long'] != 0): ?>
             let str = "<?= $lokasi['lokasi'];?>";
-            let lokasi = str.replace(/\s/g, "");
-            var kantor = lokasi;
+            let lokasiKantor = str.replace(/\s/g, "");
+            var kantor = lokasiKantor;
             L.marker([<?= $lokasi['lat'];?>, <?= $lokasi['long'];?>]).addTo(map)
                 .bindPopup(kantor).openPopup();
         
@@ -306,6 +295,7 @@ if (navigator.geolocation) {
                 fillOpacity: 0.5,
                 radius: <?= $lokasi['radius'];?>
             }).addTo(map);
+            <?php endif; ?>
         },
         function(error) {
             switch(error.code) {

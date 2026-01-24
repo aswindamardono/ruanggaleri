@@ -102,10 +102,10 @@
                                     <th>Nama</th>
                                     <th>Total Absen</th>
                                     <th>Gaji Pokok</th>
-                                    <th>Tunjangan</th>
+                                    <th>Kasbon</th>
                                     <th>Lain - lain</th>
-                                    <th>Lembur (Jam)</th>
-                                    <th>Terlambat (Jam)</th>
+                                    <th>Lembur (Menit)</th>
+                                    <th>Terlambat (Menit)</th>
                                     <th>Potongan</th>
                                     <th>Total</th>
                                     <th>Aksi</th>
@@ -117,9 +117,9 @@
                                 <tr>
                                     <td><?= $no++;?></td>
                                     <td><?= $row['name'];?></td>
-                                    <td><?= $row['total_absensi'];?> (<?= $row['total_jam'];?> Jam)</td>
+                                    <td><?= $row['total_absensi'];?> (<?= $row['total_jam'];?>)</td>
                                     <td><?= rupiah($row['gaji_pokok']);?></td>
-                                    <td><?= rupiah($row['tunjangan']);?></td>
+                                    <td><?= rupiah($row['kasbon']);?></td>
                                     <td><?= rupiah($row['lain_lain']);?></td>
                                     <td><?= $row['lembur'] ?? 0;?></td>
                                     <td><?= $row['terlambat'] ?? 0;?></td>
@@ -180,12 +180,12 @@
                                 <?php if($row['id'] == old('guru')):?>
                                 <option value="<?= $row['id'];?>" data-jam="<?= $dataJam;?>" selected>
                                     <?= $row['name'];?> - Hadir:
-                                    <?= $getabsensi2->getHadir($row['id'], $bulan1, $tahun1);?> (<?= $dataJam;?> Jam)
+                                    <?= $getabsensi2->getHadir($row['id'], $bulan1, $tahun1);?> (<?= $dataJam;?>)
                                 </option>
                                 <?php else:?>
                                 <option value="<?= $row['id'];?>" data-jam="<?= $dataJam;?>">
                                     <?= $row['name'];?> - Hadir:
-                                    <?= $getabsensi2->getHadir($row['id'], $bulan1, $tahun1);?> (<?= $dataJam;?> Jam)
+                                    <?= $getabsensi2->getHadir($row['id'], $bulan1, $tahun1);?> (<?= $dataJam;?>)
                                 </option>
                                 <?php endif;?>
                                 <?php endforeach;?>
@@ -204,12 +204,12 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="tunjangan" class="form-label">Tunjangan</label>
+                            <label for="kasbon" class="form-label">Kasbon</label>
                             <input type="number"
-                                class="form-control <?= !empty($rusak['tunjangan']) ? 'is-invalid' : ''; ?>"
-                                id="tunjangan" name="tunjangan" autofocus value="<?= old('tunjangan', 0); ?>">
+                                class="form-control <?= !empty($rusak['kasbon']) ? 'is-invalid' : ''; ?>"
+                                id="kasbon" name="kasbon" autofocus value="<?= old('kasbon', 0); ?>">
                             <small class="invalid-feedback">
-                                <?= !empty($rusak['tunjangan']) ? validation_show_error('tunjangan') : ''; ?>
+                                <?= !empty($rusak['kasbon']) ? validation_show_error('kasbon') : ''; ?>
                             </small>
                         </div>
                         <div class="form-group">
@@ -290,13 +290,13 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="tunjangan1" class="form-label">Tunjangan</label>
+                            <label for="kasbon1" class="form-label">Kasbon</label>
                             <input type="number"
-                                class="form-control <?= !empty($rusak['tunjangan1']) ? 'is-invalid' : ''; ?>"
-                                id="tunjangan1<?= $row["id"];?>" name="tunjangan1" autofocus
-                                value="<?= old('tunjangan1', $row['tunjangan']); ?>">
+                                class="form-control <?= !empty($rusak['kasbon1']) ? 'is-invalid' : ''; ?>"
+                                id="kasbon1<?= $row["id"];?>" name="kasbon1" autofocus
+                                value="<?= old('kasbon1', $row['kasbon']); ?>">
                             <small class="invalid-feedback">
-                                <?= !empty($rusak['tunjangan1']) ? validation_show_error('tunjangan1') : ''; ?>
+                                <?= !empty($rusak['kasbon1']) ? validation_show_error('kasbon1') : ''; ?>
                             </small>
                         </div>
                         <div class="form-group">
@@ -387,7 +387,7 @@ $(document).ready(function() {
 
     function calculateTotal() {
         var gajiPokok = parseInt($('#gaji_pokok').val()) || 0;
-        var tunjangan = parseInt($('#tunjangan').val()) || 0;
+        var kasbon = parseInt($('#kasbon').val()) || 0;
         var lainLain = parseInt($('#lain_lain').val()) || 0;
         var lembur = parseInt($('#lembur').val()) || 0;
         var terlambat = parseInt($('#terlambat').val()) || 0;
@@ -400,18 +400,18 @@ $(document).ready(function() {
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;
         
-        var total = gajiPokok + tunjangan + lainLain + bonusLembur - potonganTerlambat;
+        var total = gajiPokok - kasbon + lainLain + bonusLembur - potonganTerlambat;
         $('#total').val(Math.round(total));
     }
 
-    $('#gaji_pokok, #tunjangan, #lain_lain, #lembur, #terlambat').on('input', function() {
+    $('#gaji_pokok, #kasbon, #lain_lain, #lembur, #terlambat').on('input', function() {
         calculateTotal();
     });
 
     <?php foreach($penggajian as $row):?>
     function calculateEditTotal<?= $row["id"];?>() {
         var gajiPokok = parseInt($('#gaji_pokok1<?= $row["id"];?>').val()) || 0;
-        var tunjangan = parseInt($('#tunjangan1<?= $row["id"];?>').val()) || 0;
+        var kasbon = parseInt($('#kasbon1<?= $row["id"];?>').val()) || 0;
         var lainLain = parseInt($('#lain_lain1<?= $row["id"];?>').val()) || 0;
         var lembur = parseInt($('#lembur1<?= $row["id"];?>').val()) || 0;
         var terlambat = parseInt($('#terlambat1<?= $row["id"];?>').val()) || 0;
@@ -424,11 +424,11 @@ $(document).ready(function() {
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;
         
-        var total = gajiPokok + tunjangan + lainLain + bonusLembur - potonganTerlambat;
+        var total = gajiPokok - kasbon + lainLain + bonusLembur - potonganTerlambat;
         $('#total1<?= $row["id"];?>').val(Math.round(total));
     }
-    
-    $('#gaji_pokok1<?= $row["id"];?>, #tunjangan1<?= $row["id"];?>, #lain_lain1<?= $row["id"];?>, #lembur1<?= $row["id"];?>, #terlambat1<?= $row["id"];?>').on('input',
+
+    $('#gaji_pokok1<?= $row["id"];?>, #kasbon1<?= $row["id"];?>, #lain_lain1<?= $row["id"];?>, #lembur1<?= $row["id"];?>, #terlambat1<?= $row["id"];?>').on('input',
         function() {
             calculateEditTotal<?= $row["id"];?>();
         });

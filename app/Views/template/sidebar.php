@@ -17,6 +17,10 @@
             <li class="<?= (uri(1) == 'home') ? 'active' : '';?>">
                 <a href="<?= base_url('home');?>" class="nav-link"><i class="fas fa-home"></i><span>Home</span></a>
             </li>
+            <li class="<?= (uri(1) == 'workorder') ? 'active' : '';?>">
+                <a href="<?= base_url('workorder');?>" class="nav-link"><i
+                        class="fas fa-fire"></i><span>Workorder</span></a>
+            </li>
             <li class="<?= (uri(1) == 'riwayat') ? 'active' : '';?>">
                 <a href="<?= base_url('riwayat');?>" class="nav-link"><i
                         class="fas fa-file-alt"></i><span>Riwayat</span></a>
@@ -24,6 +28,10 @@
             <li class="<?= (uri(1) == 'absensi') ? 'active' : '';?>">
                 <a href="<?= base_url('absensi');?>" class="nav-link"><i
                         class="fas fa-camera"></i><span>Absensi</span></a>
+            </li>
+            <li class="<?= (uri(1) == 'kasbon') ? 'active' : '';?>">
+                <a href="<?= base_url('kasbon');?>" class="nav-link"><i
+                        class="fas fa-money-bill-alt"></i><span>Kasbon</span></a>
             </li>
             <li class="<?= (uri(1) == 'izin') ? 'active' : '';?>">
                 <a href="<?= base_url('izin');?>" class="nav-link"><i class="fas fa-calendar"></i><span>Izin</span></a>

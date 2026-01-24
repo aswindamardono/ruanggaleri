@@ -81,7 +81,7 @@ class Izin extends BaseController
         }
 
         $data = [
-            'date' => date('Y-m-d'),
+            'date' => $this->request->getPost('date'),
             'status' => $this->request->getPost('status'),
             'keterangan' => $this->request->getPost('keterangan'),
         ];
@@ -142,7 +142,7 @@ class Izin extends BaseController
         $image->move('assets/img/izin/', $foto);
         $this->UnableModel->insert([
             'user_id' => session()->get('id'),
-            'date' => date('Y-m-d'),
+            'date' => $this->request->getPost('date'),
             'status' => $this->request->getPost('status'),
             'keterangan' => $this->request->getPost('keterangan'),
             'persetujuan' => 'Pending',

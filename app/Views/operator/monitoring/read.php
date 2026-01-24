@@ -170,6 +170,10 @@
             <div class="nav-icon"><i class="fas fa-users"></i></div>
             <div class="nav-label">Karyawan</div>
         </a>
+        <a href="<?= base_url('operator/workorder');?>" class="nav-item">
+            <div class="nav-icon"><i class="fas fa-fire"></i></div>
+            <div class="nav-label">Work Order</div>
+        </a>
         <a href="<?= base_url('operator/jadwal');?>" class="nav-item">
             <div class="nav-icon"><i class="fas fa-calendar"></i></div>
             <div class="nav-label">Jadwal</div>

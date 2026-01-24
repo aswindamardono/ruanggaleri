@@ -10,7 +10,7 @@ class Izin extends BaseController
     {
         $data['title'] = 'Izin atau Sakit';
         $data['user'] = $this->KaryawanModel->getUserAndJabatan(session()->get('id'));
-        $data['unable'] = $this->UnableModel->getUnableBulan();
+        $data['unable'] = $this->UnableModel->where('user_id', session()->get('id'))->orderBy('date', 'DESC')->findAll();
         $data['bulan'] = [
             [ "no" => 1, "nama" => "Januari"],
             [ "no" => 2, "nama" => "Februari"],
@@ -27,7 +27,7 @@ class Izin extends BaseController
         ];
         $data['tahun'] = [ date("Y"), date("Y")-1, date("Y")-2, date("Y")-3, date("Y")-4];
         $data['cariizin'] = "belum";
-        $data['cariizin2'] = $this->UnableModel->getUnableBulan();
+        $data['cariizin2'] = $this->UnableModel->where('user_id', session()->get('id'))->orderBy('date', 'DESC')->findAll();
         $data['bulan1'] = date('m');
         $data['tahun1'] = date('Y');
         $data['setting'] = $this->PengaturanModel->find(1);

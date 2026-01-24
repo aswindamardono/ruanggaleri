@@ -234,76 +234,10 @@
                                 </form>
                             </div>
                         </div>
-                        <?php if($cariizin != "belum"):?>
-                        <?php if(!empty($cariizin)):?>
+                        <?php if(!empty($cariizin2)):?>
                         <div class="card">
                             <div class="card-header">
-                                <div class="font-weight-bold">Rekap Data Izin atau Sakit Bulan
-                                    <?= tanggalindo(date($tahun1.'-'.$bulan1.'-'));?>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <?php foreach($cariizin as $row):?>
-                                        <tr>
-                                            <td>
-                                                <?php if($row["status"] == "Sakit"):?>
-                                                <span class="badge badge-danger ml-2">
-                                                    <i class="fa fa-tired"></i>
-                                                </span>
-                                                <?php elseif($row["status"] == "Izin"):?>
-                                                <span class="badge badge-primary ml-2">
-                                                    <i class="fas fa-info"></i>
-                                                </span>
-                                                <?php endif;?>
-                                            </td>
-                                            <td>
-                                                <?= tanggalindo($row['date']);?>
-                                            </td>
-                                            <td>
-                                                <?= $row["status"];?>
-                                            </td>
-                                            <td>
-                                                <?php if($row["persetujuan"] == 1):?>
-                                                <span class="badge badge-success">
-                                                    Disetujui
-                                                </span>
-                                                <?php elseif($row["persetujuan"] == 2):?>
-                                                <span class="badge badge-danger">
-                                                    Ditolak
-                                                </span>
-                                                <?php elseif($row["persetujuan"] == 0):?>
-                                                <span class="badge badge-warning">
-                                                    Pending
-                                                </span>
-                                                <?php endif;?>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach;?>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <?php elseif(empty($cariizin)):?>
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="font-weight-bold">Rekap Data Izin atau Sakit Bulan
-                                    <?= tanggalindo(date($tahun1.'-'.$bulan1.'-'));?>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">Maaf Rekap Data Izin atau Sakit Bulan
-                                    <?= tanggalindo(date($tahun1.'-'.$bulan1.'-'));?> Tidak Ditemukan</div>
-                            </div>
-                        </div>
-                        <?php endif;?>
-                        <?php else:?>
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="font-weight-bold">Rekap Data Izin atau Sakit Bulan
-                                    <?= tanggalindo(date($tahun1.'-'.$bulan1.'-'));?>
-                                </div>
+                                <div class="font-weight-bold">Seluruh Data Izin atau Sakit</div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -353,6 +287,15 @@
                                         <?php endforeach;?>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                        <?php else:?>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="font-weight-bold">Seluruh Data Izin atau Sakit</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">Anda belum membuat permohonan izin atau sakit</div>
                             </div>
                         </div>
                         <?php endif;?>

@@ -2,6 +2,8 @@
 <?= $this->section('content') ?>
 
 <style>
+
+    
     body { padding-bottom: 140px; }
     
     /* Bottom Navigation */
@@ -178,8 +180,12 @@
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Tanggal</th>
-                                    <th>Keterangan</th>
+            
+                                    <th width="15%">Tanggal</th>
+                                    
+                                    <th width="1%" class="text-nowrap">Lihat</th>
+                                    
+                                    <th class="text-left">Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,12 +195,51 @@
                                     <tr>
                                         <td><?= $no++; ?></td>
                                         <td><?= date('d-m-Y', strtotime($row['tanggal'])); ?></td>
-                                        <td><?= $row['keterangan']; ?></td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalDetail<?= $row['id']; ?>">
+                                                <i class="fas fa-eye"></i> Lihat
+                                            </button>
+
+                                            <div class="modal fade" id="modalDetail<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050;">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-info text-white">
+                                                            <h5 class="modal-title">🔍 Detail Work Order</h5>
+                                                            <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modalDetail<?= $row['id']; ?>').modal('hide');">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="modal-body text-left" style="max-height: 60vh; overflow-y: auto;">
+                                                            <div class="form-group">
+                                                                <label class="font-weight-bold">📅 Tanggal:</label>
+                                                                <p><?= date('d F Y', strtotime($row['tanggal'])); ?></p>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label class="font-weight-bold">📝 Keterangan:</label>
+                                                                <div class="p-2 bg-light rounded border">
+                                                                    <?= nl2br($row['keterangan']); ?>
+                                                                </div>
+                                                            </div>
+
+                                                            </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalDetail<?= $row['id']; ?>').modal('hide');">Tutup</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </td>
+                                        <td>
+                                            <?= (strlen($row['keterangan']) > 20) ? substr($row['keterangan'], 0, 20) . '...' : $row['keterangan']; ?>
+                                        </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="3" class="text-center">Tidak ada work order untuk Anda</td>
+                                        <td colspan="4" class="text-center">Tidak ada work order untuk Anda</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -205,6 +250,14 @@
         </div>
     </section>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Script ini akan memindahkan semua modal keluar dari tabel 
+        // dan menaruhnya tepat sebelum tag </body> agar z-index nya benar.
+        $(".modal").appendTo("body");
+    });
+</script>
 
 
 <!-- Bottom Navigation dengan Absensi Terintegrasi -->

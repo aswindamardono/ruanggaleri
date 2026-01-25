@@ -583,11 +583,11 @@
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="workorderModalLabel">📋 Work Order Baru</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <!-- <button type="button" class="btn-close btn-close-white" onclick="tutupModalManual()" aria-label="Close"></button> -->
+                 <button type="button" class="close text-white" onclick="tutupModalManual()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
                 <?php if (!empty($new_workorder)): ?>
                     <div class="alert alert-info">
                         <i class="fas fa-bell"></i> Anda menerima tugas baru dari operator!
@@ -609,7 +609,8 @@
                 <?php endif; ?>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary" onclick="tutupModalManual()">Tutup</button>
+                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> -->
                 <a href="<?= base_url('workorder'); ?>" class="btn btn-primary">Lihat Semua Tugas</a>
             </div>
         </div>
@@ -646,12 +647,44 @@
         <?php if (!empty($new_workorder)): ?>
             // Tampilkan modal jika ada workorder baru
             var workorderModal = new bootstrap.Modal(document.getElementById('workorderModal'), {
-                backdrop: 'static',
-                keyboard: false
+                backdrop: true,
+                keyboard: true
             });
             workorderModal.show();
         <?php endif; ?>
     });
+</script>
+
+<script>
+    function tutupModalManual() {
+        // 1. Coba cara standar jQuery (jika jQuery aktif)
+        try {
+            $('#workorderModal').modal('hide');
+        } catch (e) {
+            console.log("Bootstrap native close failed, forcing CSS...");
+        }
+
+        // 2. CARA PAKSA (Memanipulasi CSS langsung)
+        // Ambil elemen modal
+        var modal = document.getElementById('workorderModal');
+        
+        // Sembunyikan modal
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+
+        // 3. Hapus layar hitam (backdrop) background
+        // Cari elemen backdrop bootstrap yang tertinggal
+        var backdrops = document.getElementsByClassName('modal-backdrop');
+        while(backdrops.length > 0){
+            backdrops[0].parentNode.removeChild(backdrops[0]);
+        }
+
+        // 4. Aktifkan kembali scroll pada body
+        document.body.classList.remove('modal-open');
+        document.body.style.paddingRight = '';
+        document.body.style.overflow = '';
+    }
 </script>
 
 <?= $this->endSection('content') ?>

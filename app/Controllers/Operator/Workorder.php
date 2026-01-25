@@ -9,7 +9,7 @@ class Workorder extends BaseController
     public function index()
     {
         $data['title'] = 'Work Order';
-        $workorder = $this->WorkOrderModel->findAll();
+        $workorder = $this->WorkOrderModel->orderBy('id', 'DESC')->findAll();
         
         // Tambahkan pegawai untuk setiap workorder
         foreach ($workorder as &$wo) {

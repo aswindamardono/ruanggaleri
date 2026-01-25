@@ -169,7 +169,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="gaji" class="form-label">Gaji / Jam Pelajaran</label>
+                                            <label for="gaji" class="form-label">Satuan Gaji</label>
                                             <input type="text"
                                                 class="form-control <?= !empty($rusak['gaji']) ? 'is-invalid' : ''; ?>"
                                                 name="gaji" id="gaji" value="<?= old('gaji',$setting['gaji']);?>">

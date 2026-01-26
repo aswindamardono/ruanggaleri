@@ -41,7 +41,7 @@
                                         <th>Hari</th>
                                         <th>Jam Masuk</th>
                                         <th>Jam Keluar</th>
-                                        <th>Jam Bekerja</th>
+                                        <th>Gaji</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

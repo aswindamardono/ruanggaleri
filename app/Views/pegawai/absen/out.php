@@ -187,8 +187,8 @@
                                 <?php if($jadwal != null):
                                     $now = date('H:i:s');
                                     $jam_keluar = isset($lokasi['jam_keluar']) ? strtotime($lokasi['jam_keluar']) : strtotime('17:00:00');
-                                    $time_absen = date('H:i:s', strtotime('-15 minutes', $jam_keluar));
-                                    $time_absen2 = date('H:i:s', strtotime('+15 minutes', $jam_keluar));
+                                    $time_absen = date('H:i:s', strtotime('-'.$setting['sebelum_pulang'].' minutes', $jam_keluar));
+                                    $time_absen2 = date('H:i:s', strtotime('+'.$setting['setelah_pulang'].' minutes', $jam_keluar));
                                 ?>
                                 <div class="text-center">
                                     <small>Waktu Absensi pulang anda dari jam <?= $time_absen;?> -

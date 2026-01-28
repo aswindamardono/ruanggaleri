@@ -191,7 +191,7 @@
                                     if($jadwal != null):
                                         $jam_masuk = strtotime($lokasi['jam_masuk']);
                                         $jam_keluar = strtotime($lokasi['jam_keluar']);
-                                        $time_absen =  date('H:i:s', strtotime('-15 minutes', $jam_masuk));
+                                        $time_absen =  date('H:i:s', strtotime('-'.$setting['sebelum_masuk'].' minutes', $jam_masuk));
                                         $time_pulang =  date('H:i:s', $jam_keluar);
                                     ?>
                                 <?php if($izin != null) {?>

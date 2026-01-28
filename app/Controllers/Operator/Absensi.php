@@ -269,6 +269,33 @@ class Absensi extends BaseController
         return view('operator/monitoring/read', $data);
     }
 
+    public function deleteMonitoring($id)
+    {
+        $absensi = $this->AbsensiModel->find($id);
+        if ($absensi) {
+            // Hapus file gambar jika ada
+            if (!empty($absensi['image_in'])) {
+                $path = ROOTPATH . 'public/assets/img/absensi/' . $absensi['image_in'];
+                if (is_file($path)) {
+                    unlink($path);
+                }
+            }
+            if (!empty($absensi['image_out'])) {
+                $path = ROOTPATH . 'public/assets/img/absensi/' . $absensi['image_out'];
+                if (is_file($path)) {
+                    unlink($path);
+                }
+            }
+
+            $this->AbsensiModel->delete($id);
+            session()->setFlashdata('pesan', 'Data absensi berhasil dihapus.');
+        } else {
+            session()->setFlashdata('error', 'Data absensi tidak ditemukan.');
+        }
+
+        return redirect()->to(base_url('operator/monitoring'));
+    }
+
     public function Izin()
     {
         $data['title'] = 'Izin atau Sakit';

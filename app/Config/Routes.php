@@ -86,6 +86,7 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     
     $routes->get('monitoring', 'Operator\Absensi::monitoring');
     $routes->post('monitoring/cari', 'Operator\Absensi::carimonitoring');
+    $routes->get('monitoring/delete/(:num)', 'Operator\Absensi::deleteMonitoring/$1');
     
     $routes->get('izin', 'Operator\Absensi::izin');
     $routes->post('izin/cari', 'Operator\Absensi::cariizin');

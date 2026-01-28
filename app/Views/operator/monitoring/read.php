@@ -65,7 +65,7 @@
                                     <th>Jam Keluar</th>
                                     <th>Foto</th>
                                     <th>Keterangan</th>
-                                    <th>Lokasi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,14 +98,20 @@
                                     </td>
 
                                     <td>
-                                        <div>
+                                        <div class="btn-group" role="group">
                                             <button class="btn btn-info btn-sm" data-toggle="modal"
                                                 data-target="#edit<?= $row["id"];?>">
                                                 <i class="fas fa-map mr-1"></i>
                                                 <span>
-                                                    Cek
+                                                    Lokasi
                                                 </span>
                                             </button>
+                                            <a href="<?= base_url('operator/monitoring/delete/'.$row['id']);?>" 
+                                               class="btn btn-danger btn-sm" 
+                                               onclick="return confirm('Yakin ingin menghapus data ini? Data yang dihapus tidak dapat dikembalikan.')">
+                                                <i class="fas fa-trash mr-1"></i>
+                                                <span>Hapus</span>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

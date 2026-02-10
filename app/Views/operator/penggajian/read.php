@@ -393,9 +393,7 @@ $(document).ready(function() {
         var terlambat = parseInt($('#terlambat').val()) || 0;
         
         // Hitung bonus lembur
-        var totalJam = parseInt('<?php echo isset($dataJam) ? $dataJam : 160; ?>') || 160;
-        var gajiPerJam = totalJam > 0 ? gajiPokok / totalJam : 0;
-        var bonusLembur = lembur * (gajiPerJam * 350);
+        var bonusLembur = lembur * 350;
         
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;
@@ -417,9 +415,8 @@ $(document).ready(function() {
         var terlambat = parseInt($('#terlambat1<?= $row["id"];?>').val()) || 0;
         
         // Hitung bonus lembur
-        var totalJam = <?= $row['total_jam']; ?>;
-        var gajiPerJam = totalJam > 0 ? gajiPokok / totalJam : 0;
-        var bonusLembur = lembur * (gajiPerJam * 350);
+    
+        var bonusLembur = lembur * 350;
         
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;

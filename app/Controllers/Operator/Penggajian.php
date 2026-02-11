@@ -46,6 +46,7 @@ class Penggajian extends BaseController
 
         // Ambil total menit terlambat dari AbsensiModel
         $totalMenitTerlambat = $this->AbsensiModel->getTerlambatMenit($user_id, $bulan, $tahun);
+        $totalMenitLembur = $this->AbsensiModel->getLemburMenit($user_id, $bulan, $tahun);
 
         // Konversi menit ke jam (1 jam kerja = 120 menit untuk potongan 500 per menit)
         // Sesuai requirement: 1 menit = potongan 500
@@ -58,6 +59,7 @@ class Penggajian extends BaseController
         return $this->response->setJSON([
             'status' => 'success',
             'terlambat_menit' => $totalMenitTerlambat,
+            'lembur_menit' => $totalMenitLembur,
             'terlambat_jam' => $jam,
             'terlambat_menit_sisa' => $menit,
             'display' => $jam > 0 ? sprintf('%d jam %d menit', $jam, $menit) : sprintf('%d menit', $menit)

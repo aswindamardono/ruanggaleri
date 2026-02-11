@@ -14,7 +14,7 @@ class AbsensiModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = false;
-    protected $allowedFields    = ['user_id', 'date', 'hour_in', 'image_in', 'location_in', 'hour_out', 'image_out', 'location_out', 'terlambat_menit'];
+    protected $allowedFields    = ['user_id', 'date', 'hour_in', 'image_in', 'location_in', 'hour_out', 'image_out', 'location_out', 'terlambat_menit', 'lembur_menit'];
 
     // Dates
     protected $useTimestamps = true;
@@ -107,6 +107,19 @@ class AbsensiModel extends Model
             ->getRow();
 
         return $result->terlambat_menit ?? 0;
+    }
+
+    public function getLemburMenit($id, $bulan, $tahun)
+    {
+        // Baca langsung dari database field lembur_menit
+        $result = $this->selectSum('lembur_menit')
+            ->where('user_id', $id)
+            ->where('MONTH(date)', $bulan)
+            ->where('YEAR(date)', $tahun)
+            ->get()
+            ->getRow();
+
+        return $result->lembur_menit ?? 0;
     }
 
     public function hitungDanUpdateTerlambat($id, $bulan, $tahun)

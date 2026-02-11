@@ -150,10 +150,29 @@ class Absensi extends BaseController
             $lokasi = '0,0';
         }
         if (file_put_contents($file_path, $image_base64)) {
+            $lembur_menit = 0;
+            $hari_ini = date('D');
+            $jam_keluar_actual = date('H:i:s');
+            
+            $db = \Config\Database::connect();
+            $jadwal = $db->table('jadwal')
+                ->where('hari', $hari_ini)
+                ->where('user_id', $user_id)
+                ->get()
+                ->getRowArray();
+
+            if ($jadwal) {
+                $jam_keluar_jadwal = $jadwal['jam_keluar'];
+                if (strtotime($jam_keluar_actual) > strtotime($jam_keluar_jadwal)) {
+                    $lembur_menit = menit_terlambat($jam_keluar_jadwal, $jam_keluar_actual);
+                }
+            }
+
             $this->AbsensiModel->update($cekAbsensi['id'], [
                 'hour_out' => date('H:i:s'),
                 'image_out' => $file_name,
                 'location_out' => $lokasi,
+                'lembur_menit' => $lembur_menit,
             ]);
             echo 'success|Terima Kasih, Hati - Hati Dijalan';
         }

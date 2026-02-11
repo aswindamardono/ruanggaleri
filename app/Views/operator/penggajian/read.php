@@ -226,7 +226,7 @@
                             <input type="number"
                                 class="form-control <?= !empty($rusak['lembur']) ? 'is-invalid' : ''; ?>"
                                 id="lembur" name="lembur" autofocus value="<?= old('lembur', 0); ?>">
-                            <small class="form-text text-muted">Bonus lembur: 350 gaji per menit</small>
+                            <small class="form-text text-muted">Bonus lembur: 350 gaji per menit. <span id="lembur_display" style="color: #007bff;"></span></small>
                             <small class="invalid-feedback">
                                 <?= !empty($rusak['lembur']) ? validation_show_error('lembur') : ''; ?>
                             </small>
@@ -379,6 +379,11 @@ $(document).ready(function() {
                 if (response.status === 'success') {
                     $('#terlambat').val(response.terlambat_menit);
                     $('#terlambat_display').text('(Otomatis: ' + response.display + ')');
+                    
+                    // Populate lembur otomatis
+                    $('#lembur').val(response.lembur_menit);
+                    $('#lembur_display').text('(Otomatis: ' + response.lembur_menit + ' menit)');
+                    
                     calculateTotal();
                 }
             }

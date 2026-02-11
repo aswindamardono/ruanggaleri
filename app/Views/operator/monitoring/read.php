@@ -13,6 +13,7 @@
     .nav-item.active::before { height: 3px; background: linear-gradient(90deg, #4f46e5, #06b6d4); }
     .nav-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
     .nav-label { font-size: 0.75rem; font-weight: 600; }
+    .badge.badge-info { background-color: #023248; }
 </style>
 <div class="main-content">
     <section class="section">
@@ -93,7 +94,22 @@
                                             width="100px" alt=""></td>
                                     <td>
                                         <div class="badge badge-info">
-                                            <small><?= !empty($row['terlambat_menit']) ? 'Terlambat '.$row['terlambat_menit'].' menit' : 'Tepat Waktu' ;?></small>
+                                            <small>
+                                                <?php 
+                                                $ket = [];
+                                                if (!empty($row['terlambat_menit']) && $row['terlambat_menit'] > 0) {
+                                                    $ket[] = '<span class="text-danger">Terlambat ' . $row['terlambat_menit'] . ' menit</span>';
+                                                } else {
+                                                    $ket[] = 'Tepat Waktu';
+                                                }
+                                                
+                                                if (!empty($row['lembur_menit']) && $row['lembur_menit'] > 0) {
+                                                    $ket[] = '<span class="text-primary">Lembur ' . $row['lembur_menit'] . ' menit</span>';
+                                                }
+                                                
+                                                echo implode(' & ', $ket);
+                                                ?>
+                                            </small>
                                         </div>
                                     </td>
 

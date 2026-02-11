@@ -49,7 +49,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <div class="font-weight-bold">Rekap Data <?= $title;?> <?= tanggalindo($tanggal);?> (terlambat 5 menit dianggap tidak terlambat)
+                    <div class="font-weight-bold">Rekap Data <?= $title;?> <?= tanggalindo($tanggal);?>
                     </div>
                 </div>
                 <div class="card-body">

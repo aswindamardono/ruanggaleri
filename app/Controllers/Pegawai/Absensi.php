@@ -83,13 +83,12 @@ class Absensi extends BaseController
                             ->getRowArray();
                         
                         if ($jadwal) {
-                            // Gunakan helper function untuk hitung menit terlambat
                             $jam_masuk_jadwal = $jadwal['jam_masuk'];
-                            $menit_selisih = menit_terlambat($jam_masuk_jadwal, $jam_masuk_actual);
                             
-                            // Jika terlambat lebih dari 5 menit
-                            if ($menit_selisih > 5) {
-                                $terlambat_menit = $menit_selisih - 5;
+                            // Jika jam masuk aktual lebih besar dari jam masuk jadwal (terlambat)
+                            if (strtotime($jam_masuk_actual) > strtotime($jam_masuk_jadwal)) {
+                                $menit_selisih = menit_terlambat($jam_masuk_jadwal, $jam_masuk_actual);
+                                $terlambat_menit = $menit_selisih;
                             }
                         }
                         

@@ -103,9 +103,14 @@
                     <td><?= rupiah($row['gaji_pokok']);?></td>
                 </tr>
                 <tr>
-                    <td width="150px">Bonus Lembur</td>
+                    <td width="150px">Lembur</td>
                     <td>:</td>
-                    <td><?= rupiah(isset($row['lembur']) && $row['total_jam'] > 0 ? $row['lembur'] * ($row['gaji_pokok'] / $row['total_jam']) * 1.5 : 0);?></td>
+                    <td><?= isset($row['lembur']) ? $row['lembur'] : 0;?> Menit</td>
+                </tr>
+                <tr>
+                    <td width="150px">Tambahan</td>
+                    <td>:</td>
+                    <td><?= rupiah($row['lain_lain']);?></td>
                 </tr>
                 <tr>
                     <td width="150px">Terlambat</td>

@@ -103,8 +103,8 @@
                                     <th>Total Absen</th>
                                     <th>Gaji Pokok</th>
                                     <th>Kasbon</th>
-                                    <th>Lain - lain</th>
                                     <th>Lembur (Menit)</th>
+                                    <th>Tambahan</th>
                                     <th>Terlambat (Menit)</th>
                                     <th>Potongan</th>
                                     <th>Total</th>
@@ -120,8 +120,8 @@
                                     <td><?= $row['total_absensi'];?> (<?= $row['total_jam'];?>)</td>
                                     <td><?= rupiah($row['gaji_pokok']);?></td>
                                     <td><?= rupiah($row['kasbon']);?></td>
-                                    <td><?= rupiah($row['lain_lain']);?></td>
                                     <td><?= $row['lembur'] ?? 0;?></td>
+                                    <td><?= rupiah($row['lain_lain']);?></td>
                                     <td><?= $row['terlambat'] ?? 0;?></td>
                                     <td><?= rupiah($row['potongan'] ?? 0);?></td>
                                     <td><?= rupiah($row['total']);?></td>
@@ -213,15 +213,6 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="lain_lain" class="form-label">Lain Lain</label>
-                            <input type="number"
-                                class="form-control <?= !empty($rusak['lain_lain']) ? 'is-invalid' : ''; ?>"
-                                id="lain_lain" name="lain_lain" autofocus value="<?= old('lain_lain', 0); ?>">
-                            <small class="invalid-feedback">
-                                <?= !empty($rusak['lain_lain']) ? validation_show_error('lain_lain') : ''; ?>
-                            </small>
-                        </div>
-                        <div class="form-group">
                             <label for="lembur" class="form-label">Jam Lembur</label>
                             <input type="number"
                                 class="form-control <?= !empty($rusak['lembur']) ? 'is-invalid' : ''; ?>"
@@ -229,6 +220,15 @@
                             <small class="form-text text-muted">Bonus lembur: 350 gaji per menit. <span id="lembur_display" style="color: #007bff;"></span></small>
                             <small class="invalid-feedback">
                                 <?= !empty($rusak['lembur']) ? validation_show_error('lembur') : ''; ?>
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="lain_lain" class="form-label">Tambahan</label>
+                            <input type="number"
+                                class="form-control <?= !empty($rusak['lain_lain']) ? 'is-invalid' : ''; ?>"
+                                id="lain_lain" name="lain_lain" autofocus value="<?= old('lain_lain', 0); ?>">
+                            <small class="invalid-feedback">
+                                <?= !empty($rusak['lain_lain']) ? validation_show_error('lain_lain') : ''; ?>
                             </small>
                         </div>
                         <div class="form-group">
@@ -300,16 +300,6 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="lain_lain1" class="form-label">Lain Lain</label>
-                            <input type="number"
-                                class="form-control <?= !empty($rusak['lain_lain1']) ? 'is-invalid' : ''; ?>"
-                                id="lain_lain1<?= $row["id"];?>" name="lain_lain1" autofocus
-                                value="<?= old('lain_lain1', $row['lain_lain']); ?>">
-                            <small class="invalid-feedback">
-                                <?= !empty($rusak['lain_lain1']) ? validation_show_error('lain_lain1') : ''; ?>
-                            </small>
-                        </div>
-                        <div class="form-group">
                             <label for="lembur1" class="form-label">Jam Lembur</label>
                             <input type="number"
                                 class="form-control <?= !empty($rusak['lembur1']) ? 'is-invalid' : ''; ?>"
@@ -318,6 +308,16 @@
                             <small class="form-text text-muted">Bonus lembur: 350 gaji per menit</small>
                             <small class="invalid-feedback">
                                 <?= !empty($rusak['lembur1']) ? validation_show_error('lembur1') : ''; ?>
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="lain_lain1" class="form-label">Tambahan</label>
+                            <input type="number"
+                                class="form-control <?= !empty($rusak['lain_lain1']) ? 'is-invalid' : ''; ?>"
+                                id="lain_lain1<?= $row["id"];?>" name="lain_lain1" autofocus
+                                value="<?= old('lain_lain1', $row['lain_lain']); ?>">
+                            <small class="invalid-feedback">
+                                <?= !empty($rusak['lain_lain1']) ? validation_show_error('lain_lain1') : ''; ?>
                             </small>
                         </div>
                         <div class="form-group">
@@ -397,13 +397,17 @@ $(document).ready(function() {
         var lembur = parseInt($('#lembur').val()) || 0;
         var terlambat = parseInt($('#terlambat').val()) || 0;
         
-        // Hitung bonus lembur
-        var bonusLembur = lembur * 350;
+        // Hitung Tambahan (Lain Lain) = Bonus lembur
+        var tambahan = lembur * 350;
+        $('#lain_lain').val(tambahan);
+        
+        // Update nilai lainLain untuk perhitungan total
+        lainLain = tambahan;
         
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;
         
-        var total = gajiPokok - kasbon + lainLain + bonusLembur - potonganTerlambat;
+        var total = gajiPokok - kasbon + lainLain - potonganTerlambat;
         $('#total').val(Math.round(total));
     }
 
@@ -419,14 +423,17 @@ $(document).ready(function() {
         var lembur = parseInt($('#lembur1<?= $row["id"];?>').val()) || 0;
         var terlambat = parseInt($('#terlambat1<?= $row["id"];?>').val()) || 0;
         
-        // Hitung bonus lembur
-    
-        var bonusLembur = lembur * 350;
+        // Hitung Tambahan (Lain Lain) = Bonus lembur
+        var tambahan = lembur * 350;
+        $('#lain_lain1<?= $row["id"];?>').val(tambahan);
+        
+        // Update nilai lainLain untuk perhitungan total
+        lainLain = tambahan;
         
         // Potongan terlambat: 500 per menit
         var potonganTerlambat = terlambat * 500;
         
-        var total = gajiPokok - kasbon + lainLain + bonusLembur - potonganTerlambat;
+        var total = gajiPokok - kasbon + lainLain - potonganTerlambat;
         $('#total1<?= $row["id"];?>').val(Math.round(total));
     }
 

@@ -87,6 +87,7 @@
                         <th>Total Absensi</th>
                         <th>Gaji Pokok</th>
                         <th>Lembur</th>
+                        <th>Tambahan</th>
                         <th>Terlambat</th>
                         <th>Potongan</th>
                         <th>Total</th>
@@ -105,7 +106,8 @@
                         <td><?= $row['name_jabatan'];?></td>
                         <td align="center"><?= $row['total_absensi'];?></td>
                         <td align="right"><?= rupiah($row['gaji_pokok']);?></td>
-                        <td align="right"><?= rupiah(isset($row['lembur']) && $row['total_jam'] > 0 ? $row['lembur'] * ($row['gaji_pokok'] / $row['total_jam']) * 1.5 : 0);?></td>
+                        <td align="center"><?= isset($row['lembur']) ? $row['lembur'] : 0;?> Menit</td>
+                        <td align="right"><?= rupiah($row['lain_lain']);?></td>
                         <td align="center"><?= isset($row['terlambat']) ? $row['terlambat'] : 0;?> Menit</td>
                         <td align="right"><?= rupiah(isset($row['potongan']) ? $row['potongan'] : 0);?></td>
                         <td align="right"><?= rupiah($row['total']);?></td>
@@ -126,7 +128,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="8">Total Penggajian</th>
+                        <th colspan="9">Total Penggajian</th>
                         <td align="right"><b><?= rupiah($gaji);?></b></td>
                     </tr>
                 </tfoot>

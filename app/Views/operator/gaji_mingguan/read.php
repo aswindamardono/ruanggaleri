@@ -56,9 +56,9 @@
                         <a class="btn btn-success text-white" href="<?= base_url('operator/gaji-mingguan/excel/').$tanggal_mulai.'/'.$tanggal_selesai;?>">
                             <i class="fas fa-file-excel mr-2"></i>Excel
                         </a>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#add">
+                        <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#add">
                             <i class="fas fa-plus mr-2"></i>Tambah
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="card-body">
@@ -70,7 +70,6 @@
                                     <th>Nama</th>
                                     <th>Total Absen</th>
                                     <th>Gaji Pokok</th>
-                                    <th>Kasbon</th>
                                     <th>Lembur (Menit)</th>
                                     <th>Tambahan</th>
                                     <th>Terlambat (Menit)</th>
@@ -85,9 +84,8 @@
                                 <tr>
                                     <td><?= $no++;?></td>
                                     <td><?= $row['name'];?></td>
-                                    <td><?= $row['total_absensi'];?> (<?= $row['total_jam'];?>)</td>
+                                    <td><?= $row['total_absensi'];?></td>
                                     <td><?= rupiah($row['gaji_pokok']);?></td>
-                                    <td><?= rupiah($row['kasbon']);?></td>
                                     <td><?= $row['lembur'] ?? 0;?></td>
                                     <td><?= rupiah($row['lain_lain']);?></td>
                                     <td><?= $row['terlambat'] ?? 0;?></td>
@@ -339,15 +337,7 @@ $(document).ready(function() {
             daysOfWeek: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
         },
         startDate: tanggal_mulai,
-        endDate: tanggal_selesai,
-        ranges: {
-            'Minggu Ini': [moment().subtract(moment().weekday(), 'days'), moment().add(6 - moment().weekday(), 'days')],
-            'Minggu Lalu': [moment().subtract(moment().weekday() + 7, 'days'), moment().subtract(moment().weekday() + 1, 'days')],
-            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-            'Bulan Lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-        }
+        endDate: tanggal_selesai
     }, function(start, end) {
         $('#tanggal_mulai').val(start.format('YYYY-MM-DD'));
         $('#tanggal_selesai').val(end.format('YYYY-MM-DD'));

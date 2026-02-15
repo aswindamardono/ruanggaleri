@@ -259,6 +259,13 @@ class GajiMingguan extends BaseController
 
     public function delete($id)
     {
+        $gajumingguan = $this->GajiMingguanModel->find($id);
+        
+        if (!$gajumingguan) {
+            session()->setFlashdata('error', 'Data Gaji Mingguan tidak ditemukan.');
+            return redirect()->to(base_url('/operator/gaji-mingguan'));
+        }
+        
         $this->GajiMingguanModel->delete($id);
         session()->setFlashdata('pesan', 'Data Gaji Mingguan berhasil dihapus.');
         return redirect()->to(base_url('/operator/gaji-mingguan'));
@@ -310,6 +317,11 @@ class GajiMingguan extends BaseController
 
         $gajumingguan = $this->GajiMingguanModel->find($id);
         
+        if (!$gajumingguan) {
+            session()->setFlashdata('error', 'Data Gaji Mingguan tidak ditemukan.');
+            return redirect()->to(base_url('/operator/gaji-mingguan'));
+        }
+        
         $gaji_pokok = (int)$this->request->getPost('gaji_pokok1');
         $kasbon = (int)$this->request->getPost('kasbon1');
         $lain_lain = (int)$this->request->getPost('lain_lain1');
@@ -358,31 +370,40 @@ class GajiMingguan extends BaseController
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Nama');
         $sheet->setCellValue('C1', 'Total Absen');
-        $sheet->setCellValue('D1', 'Total Jam');
-        $sheet->setCellValue('E1', 'Gaji Pokok');
-        $sheet->setCellValue('F1', 'Kasbon');
-        $sheet->setCellValue('G1', 'Lain - lain');
-        $sheet->setCellValue('H1', 'Total');
+        $sheet->setCellValue('D1', 'Gaji Pokok');
+        $sheet->setCellValue('E1', 'Lembur (Menit)');
+        $sheet->setCellValue('F1', 'Tambahan');
+        $sheet->setCellValue('G1', 'Terlambat (Menit)');
+        $sheet->setCellValue('H1', 'Potongan');
+        $sheet->setCellValue('I1', 'Total');
 
         $row = 2;
         $no = 1;
+        $totalKeseluruhan = 0;
         foreach ($gaji_mingguan as $a) {
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $a['name']);
             $sheet->setCellValue('C' . $row, $a['total_absensi']);
-            $sheet->setCellValue('D' . $row, $a['total_jam']);
-            $sheet->setCellValue('E' . $row, $a['gaji_pokok']);
-            $sheet->setCellValue('F' . $row, $a['kasbon']);
-            $sheet->setCellValue('G' . $row, $a['lain_lain']);
-            $sheet->setCellValue('H' . $row, '=SUM(E'.$row.':G'.$row.')');
+            $sheet->setCellValue('D' . $row, $a['gaji_pokok']);
+            $sheet->setCellValue('E' . $row, $a['lembur']);
+            $sheet->setCellValue('F' . $row, $a['lain_lain']);
+            $sheet->setCellValue('G' . $row, $a['terlambat']);
+            $sheet->setCellValue('H' . $row, $a['potongan']);
+            $sheet->setCellValue('I' . $row, $a['total']);
+            
+            $totalKeseluruhan += $a['total'];
 
-            $sheet->getStyle('E'.$row.':H'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0');
+            // Format currency untuk kolom Gaji Pokok, Tambahan, Potongan, Total
+            $sheet->getStyle('D'.$row.':D'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0');
+            $sheet->getStyle('F'.$row.':F'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0');
+            $sheet->getStyle('H'.$row.':I'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0');
             $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('A' . $row)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
             $row++;
         }
 
-        $columnWidths = [5, 30, 15, 15, 15, 15, 15, 15];
+        // Set column widths
+        $columnWidths = [5, 25, 15, 15, 18, 15, 18, 15, 15];
         foreach ($columnWidths as $key => $width) {
             $column = chr(65 + $key);
             $sheet->getColumnDimension($column)->setWidth($width);
@@ -392,20 +413,21 @@ class GajiMingguan extends BaseController
             $sheet->getStyle($column . '1')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         }
 
-        $sheet->getStyle('A1:B1')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A1:B1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:B1')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A2:H' . ($row - 1))->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A2:H' . ($row - 1))->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle('A1:I1')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A2:I' . ($row - 1))->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A2:I' . ($row - 1))->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         $sheet->getStyle('A2:A' . ($row - 1))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A2:A' . ($row - 1))->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-        $sheet->mergeCells('A'.$row.':G'.$row);
+        
+        // Add total row
+        $sheet->mergeCells('A'.$row.':C'.$row);
         $sheet->setCellValue('A'.$row, "Total Gaji Mingguan");
-        $sheet->setCellValue('H'.$row, '=SUM(H2:H'.($row-1).')');
-        $sheet->getStyle('H'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0.00');
-        $sheet->getStyle('A'.$row.':G'.$row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A'.$row.':H'.$row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        $sheet->getStyle('A'.$row.':H'.$row)->getFont()->setBold(true);
+        $sheet->setCellValue('I'.$row, $totalKeseluruhan);
+        $sheet->getStyle('I'.$row)->getNumberFormat()->setFormatCode('[$Rp. ]#,##0');
+        $sheet->getStyle('A'.$row.':C'.$row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A'.$row.':I'.$row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle('A'.$row.':I'.$row)->getFont()->setBold(true);
+        
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 
         ob_end_clean();

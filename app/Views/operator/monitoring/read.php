@@ -61,6 +61,7 @@
                                     <th width="5%">No</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
+                                    <th>Tanggal</th>
                                     <th>Jam Masuk</th>
                                     <th>Foto</th>
                                     <th>Jam Keluar</th>
@@ -74,8 +75,10 @@
                                 <?php foreach ($monitoring as $row):?>
                                 <tr>
                                     <td><?= $no++;?></td>
+                                    
                                     <td><?= $row['name'];?></td>
                                     <td><?= $row['name_jabatan'];?> (<?= $row['akronim'];?>)</td>
+                                    <td><?= tanggalindo($row['date']);?></td>
                                     <td>
                                         <div
                                             class="badge <?= empty($row['image_in']) ? 'badge-danger' : 'badge-success' ;?>">

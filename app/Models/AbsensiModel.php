@@ -122,6 +122,69 @@ class AbsensiModel extends Model
         return $result->lembur_menit ?? 0;
     }
 
+    public function getHadirRange($id, $tanggal_mulai, $tanggal_selesai)
+    {
+        $count = $this->where('user_id', $id)
+            ->where('date >=', $tanggal_mulai)
+            ->where('date <=', $tanggal_selesai)
+            ->where('image_out !=', '')
+            ->countAllResults();
+
+        return $count ? $count : 0;
+    }
+
+    public function getJamRange($id, $tanggal_mulai, $tanggal_selesai)
+    {
+        $query = $this->where('user_id', $id)
+            ->where('date >=', $tanggal_mulai)
+            ->where('date <=', $tanggal_selesai)
+            ->where('image_out !=', '');
+
+        $totalJam = 0;
+        $results = $query->findAll();
+
+        foreach ($results as $result) {
+            $date = date_create($result['date']);
+            $day = date_format($date, 'D');
+
+            $jadwal = $this->db->table('jadwal')
+                ->where('hari', $day)
+                ->where('user_id', $id)
+                ->get()
+                ->getRowArray();
+
+            if ($jadwal) {
+                $totalJam += $jadwal['jam_mengajar'];
+            }
+        }
+
+        return $totalJam ?? 0;
+    }
+
+    public function getTerlambatMenitRange($id, $tanggal_mulai, $tanggal_selesai)
+    {
+        $result = $this->selectSum('terlambat_menit')
+            ->where('user_id', $id)
+            ->where('date >=', $tanggal_mulai)
+            ->where('date <=', $tanggal_selesai)
+            ->get()
+            ->getRow();
+
+        return $result->terlambat_menit ?? 0;
+    }
+
+    public function getLemburMenitRange($id, $tanggal_mulai, $tanggal_selesai)
+    {
+        $result = $this->selectSum('lembur_menit')
+            ->where('user_id', $id)
+            ->where('date >=', $tanggal_mulai)
+            ->where('date <=', $tanggal_selesai)
+            ->get()
+            ->getRow();
+
+        return $result->lembur_menit ?? 0;
+    }
+
     public function hitungDanUpdateTerlambat($id, $bulan, $tahun)
     {
         // Ambil semua record absensi untuk user, bulan, dan tahun tertentu

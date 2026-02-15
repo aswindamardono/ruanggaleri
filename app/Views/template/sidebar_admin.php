@@ -53,6 +53,10 @@
                 <a href="<?= base_url('operator/penggajian');?>" class="nav-link"><i
                         class="fas fa-dollar-sign"></i><span>Penggajian</span></a>
             </li>
+            <li class="<?= (uri(2) == 'gaji-mingguan') ? 'active' : '';?>">
+                <a href="<?= base_url('operator/gaji-mingguan');?>" class="nav-link"><i
+                        class="fas fa-calendar-alt"></i><span>Gaji Mingguan</span></a>
+            </li>
             <li class="menu-header">Data Menu</li>
             <li class="<?= (uri(2) == 'jabatan') ? 'active' : '';?>">
                 <a href="<?= base_url('operator/jabatan');?>" class="nav-link"><i

@@ -49,6 +49,7 @@ abstract class BaseController extends Controller
     protected $KaryawanModel;
     protected $PengaturanModel;
     protected $PenggajianModel;
+    protected $GajiMingguanModel;
     protected $AbsensiModel;
     protected $TokenModel;
     protected $UnableModel;
@@ -77,6 +78,7 @@ abstract class BaseController extends Controller
         $this->KaryawanModel = new \App\Models\KaryawanModel();
         $this->PengaturanModel = new \App\Models\PengaturanModel();
         $this->PenggajianModel = new \App\Models\PenggajianModel();
+        $this->GajiMingguanModel = new \App\Models\GajiMingguanModel();
         $this->AbsensiModel = new \App\Models\AbsensiModel();
         $this->TokenModel = new \App\Models\TokenModel();
         $this->UnableModel = new \App\Models\UnableModel();

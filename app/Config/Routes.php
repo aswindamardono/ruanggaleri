@@ -107,6 +107,15 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     $routes->get('penggajian/excel/(:num)/(:num)', 'Operator\Penggajian::excel/$1/$2');
     $routes->get('penggajian/cetak/(:num)/(:num)', 'Operator\Penggajian::cetak/$1/$2');
     
+    $routes->get('gaji-mingguan', 'Operator\GajiMingguan::index');
+    $routes->post('gaji-mingguan/getTerlambatOtomatisRange', 'Operator\GajiMingguan::getTerlambatOtomatisRange');
+    $routes->post('gaji-mingguan', 'Operator\GajiMingguan::save');
+    $routes->get('gaji-mingguan/delete/(:num)', 'Operator\GajiMingguan::delete/$1');
+    $routes->post('gaji-mingguan/update/(:num)', 'Operator\GajiMingguan::update/$1');
+    $routes->post('gaji-mingguan/cari', 'Operator\GajiMingguan::cari');
+    $routes->get('gaji-mingguan/excel/(:any)/(:any)', 'Operator\GajiMingguan::excel/$1/$2');
+    $routes->get('gaji-mingguan/cetak/(:any)/(:any)', 'Operator\GajiMingguan::cetak/$1/$2');
+    
     $routes->get('workorder', 'Operator\Workorder::index');
     $routes->get('workorder/create', 'Operator\Workorder::create');
     $routes->post('workorder/save', 'Operator\Workorder::save');

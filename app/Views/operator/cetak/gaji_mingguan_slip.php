@@ -69,12 +69,12 @@
             </tr>
             <tr>
                 <td>Lembur (<?= $row['lembur'];?> menit)</td>
-                <td class="amount"><?= rupiah($row['lembur'] * ($row['gaji_pokok'] / ($row['total_jam'] > 0 ? $row['total_jam'] : 1) * 1.5));?></td>
-            </tr>
-            <tr>
-                <td>Tambahan</td>
                 <td class="amount"><?= rupiah($row['lain_lain']);?></td>
             </tr>
+            <!-- <tr>
+                <td>Tambahan</td>
+                <td class="amount"><?= rupiah($row['lain_lain']);?></td>
+            </tr> -->
             <tr>
                 <td>Terlambat (<?= $row['terlambat'];?> menit)</td>
                 <td class="amount">-<?= rupiah($row['potongan']);?></td>

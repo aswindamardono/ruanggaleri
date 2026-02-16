@@ -78,7 +78,7 @@
                                     <th>Terlambat (Menit)</th>
                                     <th>Potongan</th>
                                     <th>Total</th>
-                                    <th>Aksi</th>
+                                    <!-- <th>Aksi</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,7 +94,7 @@
                                     <td><?= $row['terlambat'] ?? 0;?></td>
                                     <td><?= rupiah($row['potongan'] ?? 0);?></td>
                                     <td><?= rupiah($row['total']);?></td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="d-flex">
                                             <div>
                                                 <button class="btn btn-warning btn-sm mr-1" data-toggle="modal"
@@ -113,7 +113,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                                 <?php endforeach;?>
                             </tbody>

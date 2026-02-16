@@ -360,6 +360,20 @@ class GajiMingguan extends BaseController
         return view('operator/gaji_mingguan/cetak', $data);
     }
 
+    public function slip($tanggal_mulai, $tanggal_selesai)
+    {
+        $filename = 'Slip Gaji Mingguan '.$tanggal_mulai.' - '.$tanggal_selesai;
+        $data['setting'] = $this->PengaturanModel->find(1);
+        $data['tanggal_mulai'] = $tanggal_mulai;
+        $data['tanggal_selesai'] = $tanggal_selesai;
+        $data['gaji_mingguan'] = $this->getGajiMingguanData($tanggal_mulai, $tanggal_selesai);
+        $this->Dompdf->loadHtml(view('operator/cetak/gaji_mingguan_slip', $data));
+        $this->Dompdf->setPaper('A4', 'portrait');
+        $this->Dompdf->render();
+        $this->Dompdf->stream($filename, ['Attachment' => false]);
+        exit();
+    }
+
     public function excel($tanggal_mulai, $tanggal_selesai)
     {
         $filename = 'Gaji Mingguan '. $tanggal_mulai .' - '. $tanggal_selesai;

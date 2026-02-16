@@ -56,6 +56,9 @@
                         <a class="btn btn-success text-white" href="<?= base_url('operator/gaji-mingguan/excel/').$tanggal_mulai.'/'.$tanggal_selesai;?>">
                             <i class="fas fa-file-excel mr-2"></i>Excel
                         </a>
+                        <a class="btn btn-info text-white" href="<?= base_url('operator/gaji-mingguan/cetak/').$tanggal_mulai.'/'.$tanggal_selesai;?>">
+                            <i class="fas fa-print mr-2"></i>Cetak
+                        </a>
                         <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#add">
                             <i class="fas fa-plus mr-2"></i>Tambah
                         </button> -->

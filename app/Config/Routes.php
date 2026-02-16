@@ -115,6 +115,7 @@ $routes->group('operator', ['filter' => 'role:Operator'], function ($routes) {
     $routes->post('gaji-mingguan/cari', 'Operator\GajiMingguan::cari');
     $routes->get('gaji-mingguan/excel/(:any)/(:any)', 'Operator\GajiMingguan::excel/$1/$2');
     $routes->get('gaji-mingguan/cetak/(:any)/(:any)', 'Operator\GajiMingguan::cetak/$1/$2');
+    $routes->get('gaji-mingguan/slip/(:any)/(:any)', 'Operator\GajiMingguan::slip/$1/$2');
     
     $routes->get('workorder', 'Operator\Workorder::index');
     $routes->get('workorder/create', 'Operator\Workorder::create');

@@ -16,15 +16,18 @@
                 <div class="card-header">
                     <div class="font-weight-bold">Laporan Gaji Mingguan</div>
                     <div class="ml-auto">
-                        <button class="btn btn-danger text-white" onclick="window.print()">
+                        <a href="<?= base_url('operator/gaji-mingguan/slip/').$tanggal_mulai.'/'.$tanggal_selesai;?>" class="btn btn-info text-white" target="_blank">
+                            <i class="fas fa-file-pdf mr-2"></i>Slip PDF
+                        </a>
+                        <!-- <button class="btn btn-success text-white" onclick="window.print()">
                             <i class="fas fa-print mr-2"></i>Cetak
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="card-body print-section">
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <h2><?= $setting['nama_sekolah'];?></h2>
-                        <p><?= $setting['alamat_sekolah'];?></p>
+                        <h2><?= $setting['nama_sekolah'] ?? 'PT. Ruang Galeri';?></h2>
+                        <p><?= $setting['alamat_sekolah'] ?? '';?></p>
                     </div>
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h4><?= $title;?></h4>
@@ -37,8 +40,10 @@
                                 <th>Nama</th>
                                 <th>Total Absen</th>
                                 <th>Gaji Pokok</th>
-                                <th>Kasbon</th>
-                                <th>Lain - lain</th>
+                                <th>Lembur</th>
+                                <th>Tambahan</th>
+                                <th>Terlambat</th>
+                                <th>Potongan</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -50,26 +55,29 @@
                                 <td><?= $row['name'];?></td>
                                 <td><?= $row['total_absensi'];?></td>
                                 <td><?= rupiah($row['gaji_pokok']);?></td>
-                                <td><?= rupiah($row['kasbon']);?></td>
+                                <td><?= $row['lembur'];?> Menit</td>
                                 <td><?= rupiah($row['lain_lain']);?></td>
+                                <td><?= $row['terlambat'];?> Menit</td>
+                                <td><?= rupiah($row['potongan']);?></td>
                                 <td><?= rupiah($row['total']);?></td>
                             </tr>
                             <?php $totalGaji += $row['total'];?>
                             <?php endforeach;?>
                             <tr style="font-weight: bold;">
-                                <td colspan="6" style="text-align: right;">Total Gaji Mingguan:</td>
+                                <td colspan="8" style="text-align: right;">Total Gaji Mingguan:</td>
                                 <td><?= rupiah($totalGaji);?></td>
                             </tr>
                         </tbody>
                     </table>
                     <div style="margin-top: 40px; display: flex; justify-content: space-around;">
                         <div style="text-align: center;">
-                            <p>Mengetahui</p>
-                            <p style="margin-top: 60px;">(...................................)</p>
+                            <p> </p>
+                            <p style="margin-top: 60px;"> </p>
                         </div>
                         <div style="text-align: center;">
                             <p>Tanggal: <?= date('d-m-Y');?></p>
-                            <p style="margin-top: 60px;">(...................................)</p>
+                            <p>Mengetahui</p>
+                            <p style="margin-top: 60px;">(Direktur)</p>
                         </div>
                     </div>
                 </div>
